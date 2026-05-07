@@ -117,7 +117,7 @@ const LEVELS = {
     secondaryLink: "https://ledger-lift-studio.kit.com/dddc0c1e86",
     color: BRAND.sage,
     icon: "🌱",
-    ckTag: "diagnostic-level-1",
+    ckTag: "Level 1 - Build Yourself First",
   },
   2: {
     label: "Level 2 — Cleanup",
@@ -133,7 +133,7 @@ const LEVELS = {
     secondaryLink: "https://ledger-lift-studio.kit.com/dddc0c1e86",
     color: BRAND.gold,
     icon: "🔄",
-    ckTag: "diagnostic-level-2",
+    ckTag: "Level 2 - Monthly Close Command Center",
   },
   3: {
     label: "Level 3 — Systems",
@@ -149,7 +149,7 @@ const LEVELS = {
     secondaryLink: "https://ledger-lift-studio.kit.com/dddc0c1e86",
     color: BRAND.navyLight,
     icon: "⚙️",
-    ckTag: "diagnostic-level-3",
+    ckTag: "Level 3 - Build Business Systems",
   },
   4: {
     label: "Level 4 — Strategy",
@@ -165,7 +165,7 @@ const LEVELS = {
     secondaryLink: "https://ledger-lift-studio.kit.com/dddc0c1e86",
     color: BRAND.coral,
     icon: "📈",
-    ckTag: "diagnostic-level-4",
+    ckTag: "Level 4 - Scale & Automate",
   },
   5: {
     label: "Level 5 — Optimized",
@@ -181,7 +181,7 @@ const LEVELS = {
     secondaryLink: "https://ledger-lift-studio.kit.com/dddc0c1e86",
     color: BRAND.navy,
     icon: "🏆",
-    ckTag: "diagnostic-level-5",
+    ckTag: "Level 5 - Optimize & Master",
   },
 };
 
