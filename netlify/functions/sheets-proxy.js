@@ -30,9 +30,13 @@ exports.handler = async function (event) {
     const dateStr = now.toLocaleDateString("en-US", { year: "numeric", month: "2-digit", day: "2-digit" });
     const timeStr = now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
 
-    const token = await getAccessToken();
+    console.log(`[sheets-proxy] SHEET_ID in use: ${SHEET_ID}`);
+    console.log(`[sheets-proxy] TAB: ${TAB}`);
 
-    await appendRow(token, [
+    const token = await getAccessToken();
+    console.log(`[sheets-proxy] Got access token: ${token ? "yes" : "no"}`);
+
+    const result = await appendRow(token, [
       sessionId,
       dateStr,
       timeStr,
@@ -45,6 +49,7 @@ exports.handler = async function (event) {
     ]);
 
     console.log(`[sheets-proxy] Appended row: ${sessionId} | ${phase} | level ${level || "?"}`);
+    console.log(`[sheets-proxy] API response: ${JSON.stringify(result)}`);
 
     return { statusCode: 200, headers, body: JSON.stringify({ success: true }) };
   } catch (err) {
