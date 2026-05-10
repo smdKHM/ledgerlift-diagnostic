@@ -13,8 +13,7 @@ const BRAND = {
   lightGray: "#F3F0EB",
 };
 
-// ─── FIX #1: SYSTEM PROMPT ───────────────────────────────────────────────────
-// Named SYSTEM_PROMPT to match the variable your claude-proxy.js already reads.
+// ─── SYSTEM PROMPT ───────────────────────────────────────────────────────────
 // eslint-disable-next-line no-unused-vars
 const SYSTEM_PROMPT = `You are a financial diagnostic advisor for LedgerLift Studio, a bookkeeping service built for bootstrap founders. Your job is to figure out which of the 5 Financial Levels a founder is at, then tell them clearly what they need — no fluff, no sales pitch.
 
@@ -98,23 +97,25 @@ This string will be hidden from the user and used to route them to the right res
 - Keep responses short. 3–5 sentences max per message during the diagnostic. This is a conversation, not a report.
 - If someone asks what this tool is or who made it, say it's a free financial diagnostic — keep it brief and redirect to the questions.`;
 
-// ─── FIX #3: LEVELS — products, prices, and CTAs aligned with strategy docs ──
-// Primary CTA → product purchase (Stan Store) for Levels 1–2.
-// Secondary CTA → diagnostic call booking for all levels.
-// Levels 3–5 primary CTA → diagnostic call (higher-touch, needs a conversation).
+// ─── LEVELS ──────────────────────────────────────────────────────────────────
+// CHANGES: 
+//   1. All kit.com URLs replaced with cal.com calendar link
+//   2. tagline, description updated with diagnosis + agitation copy for all levels
+const CAL_LINK = "https://cal.com/ledgerliftstudio/free-15-minute-books-reality-report";
+
 const LEVELS = {
   1: {
     label: "Level 1 — Foundation",
     revenue: "$0–$50K",
-    tagline: "You need a simple system, not a bookkeeper.",
+    tagline: "Your books are either nonexistent or held together with spreadsheets and good intentions.",
     description:
-      "Your books are either nonexistent or a mess of receipts and guesses. The good news: you don't need to hire anyone yet. A solid template and a focused weekend will get you 80% of the way there.",
+      "At this stage, most founders are mixing personal and business money, have no idea what they're actually keeping after expenses, and will face a painful surprise at tax time. Every month without a system costs you clarity — and clarity is what helps you decide whether to keep going or pivot.",
     recommendation: "Phase 1 Core Workbook",
     price: "$17",
     cta: "Get the Phase 1 Workbook →",
     ctaLink: "https://stan.store/ledgerliftstudio",
     secondary: "Or book a free call to talk through your situation",
-    secondaryLink: "https://ledger-lift-studio.kit.com/dddc0c1e86",
+    secondaryLink: CAL_LINK,
     color: BRAND.sage,
     icon: "🌱",
     ckTag: "Level 1 - Build Yourself First",
@@ -122,15 +123,15 @@ const LEVELS = {
   2: {
     label: "Level 2 — Cleanup",
     revenue: "$50K–$150K",
-    tagline: "You need a Bookkeeping Reset, not a subscription.",
+    tagline: "Your business is growing, but your books are reactive, behind, and hard to trust.",
     description:
-      "Your books are behind — possibly months behind. Accounts aren't reconciled, transactions are uncategorized, and tax season fills you with dread. A one-time Reset fixes everything in 14 days at a fixed price.",
+      "At this stage, founders routinely underprice their services, miss tax deductions, and make hiring decisions based on bank balance instead of actual profit. You can't fix what you can't see — and right now, you can't see your numbers clearly. A one-time Reset fixes everything in 14 days at a fixed price.",
     recommendation: "Bookkeeping Reset Service",
     price: "$997",
-    cta: "Book a Free Diagnostic Call →",
-    ctaLink: "https://ledger-lift-studio.kit.com/dddc0c1e86",
+    cta: "Book a Free 15-Min Call →",
+    ctaLink: CAL_LINK,
     secondary: "Let's confirm this is the right fit first",
-    secondaryLink: "https://ledger-lift-studio.kit.com/dddc0c1e86",
+    secondaryLink: CAL_LINK,
     color: BRAND.gold,
     icon: "🔄",
     ckTag: "Level 2 - Monthly Close Command Center",
@@ -138,15 +139,15 @@ const LEVELS = {
   3: {
     label: "Level 3 — Systems",
     revenue: "$150K–$300K",
-    tagline: "You need ongoing support, not a one-time fix.",
+    tagline: "You have revenue, but your financial systems haven't kept up with your growth.",
     description:
-      "Your books are mostly current but you're spending too much time managing them yourself. LedgerDesk gives you a real system and monthly close support so you can stop being your own bookkeeper.",
+      "Without a real system, you're spending hours each month recreating context you should already have. Your CPA is working from incomplete data. And the decisions you're making about hiring, pricing, and reinvestment are based on guesses, not numbers. LedgerDesk gives you a real system and monthly close support so you can stop being your own bookkeeper.",
     recommendation: "LedgerDesk Solo",
     price: "$197",
     cta: "Get LedgerDesk Solo →",
     ctaLink: "https://stan.store/Ledgerliftstudio/p/ledgerdesk-solo--bookkeeping-for-founders",
     secondary: "Or book a free call to confirm this is the right fit",
-    secondaryLink: "https://ledger-lift-studio.kit.com/dddc0c1e86",
+    secondaryLink: CAL_LINK,
     color: BRAND.navyLight,
     icon: "⚙️",
     ckTag: "Level 3 - Build Business Systems",
@@ -154,15 +155,15 @@ const LEVELS = {
   4: {
     label: "Level 4 — Strategy",
     revenue: "$300K–$500K",
-    tagline: "You need financial insight, not just clean books.",
+    tagline: "You have a real business — but your financial infrastructure is still built for a smaller one.",
     description:
-      "You have the data but nobody's turning it into decisions. You need a financial partner who reads your numbers and thinks ahead with you — not just a bookkeeper who files transactions.",
+      "At your revenue level, gaps in your financial reporting cost real money — in overpaid taxes, underpriced offers, or missed opportunities to reinvest strategically. You have the data but nobody's turning it into decisions. You need a financial partner who reads your numbers and thinks ahead with you — not just a bookkeeper who files transactions.",
     recommendation: "Reset + Strategy Call",
     price: "Custom",
-    cta: "Book a Free Diagnostic Call →",
-    ctaLink: "https://ledger-lift-studio.kit.com/dddc0c1e86",
+    cta: "Book a Free 15-Min Call →",
+    ctaLink: CAL_LINK,
     secondary: "Let's figure out exactly what you need",
-    secondaryLink: "https://ledger-lift-studio.kit.com/dddc0c1e86",
+    secondaryLink: CAL_LINK,
     color: BRAND.coral,
     icon: "📈",
     ckTag: "Level 4 - Scale & Automate",
@@ -170,15 +171,15 @@ const LEVELS = {
   5: {
     label: "Level 5 — Optimized",
     revenue: "$500K+",
-    tagline: "You need a full financial stack.",
+    tagline: "You've built something real. Your financial operations need to match the size of your ambition.",
     description:
-      "Multiple revenue streams, a team, complex financials — you've outgrown standard bookkeeping. Let's have a real conversation about a custom solution for your business.",
+      "At this stage, financial blind spots compound fast. A miscategorized expense, an unreviewed P&L, or a tax position you didn't plan for can cost you more than a full year of bookkeeping service. Multiple revenue streams, a team, complex financials — you've outgrown standard bookkeeping. Let's have a real conversation about a custom solution for your business.",
     recommendation: "Custom Engagement",
     price: "Custom",
     cta: "Book a Strategy Call →",
-    ctaLink: "https://ledger-lift-studio.kit.com/dddc0c1e86",
+    ctaLink: CAL_LINK,
     secondary: "Let's build the right solution together",
-    secondaryLink: "https://ledger-lift-studio.kit.com/dddc0c1e86",
+    secondaryLink: CAL_LINK,
     color: BRAND.navy,
     icon: "🏆",
     ckTag: "Level 5 - Optimize & Master",
@@ -186,9 +187,6 @@ const LEVELS = {
 };
 
 // ─── API CALL (via Netlify Function) ─────────────────────────────────────────
-// FIX #1: No longer sends system prompt in the body — claude-proxy.js already
-// reads SYSTEM_PROMPT from the component scope and injects it into the
-// Anthropic API call. Messages only.
 async function callClaude(messages) {
   const response = await fetch("/.netlify/functions/claude-proxy", {
     method: "POST",
@@ -203,39 +201,7 @@ async function callClaude(messages) {
   return data.content || "";
 }
 
-// ─── FIX #2: CONVERTKIT INTEGRATION ──────────────────────────────────────────
-// Subscribes the user and applies a level-specific tag so the right email
-// sequence fires automatically.
-//
-// SETUP REQUIRED — deploy netlify/functions/ck-proxy.js:
-//
-// exports.handler = async (event) => {
-//   if (event.httpMethod !== "POST") return { statusCode: 405 };
-//   const { email, firstName, tag } = JSON.parse(event.body);
-//   const res = await fetch(
-//     `https://api.convertkit.com/v3/forms/${process.env.CONVERTKIT_FORM_ID}/subscribe`,
-//     {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({
-//         api_key: process.env.CONVERTKIT_API_KEY,
-//         email,
-//         first_name: firstName,
-//         tags: [tag],
-//       }),
-//     }
-//   );
-//   const data = await res.json();
-//   return { statusCode: res.ok ? 200 : 500, body: JSON.stringify(data) };
-// };
-//
-// Also set these Netlify env vars:
-//   CONVERTKIT_API_KEY=your_api_key
-//   CONVERTKIT_FORM_ID=your_form_id
-//
-// In ConvertKit: create tags diagnostic-level-1 through diagnostic-level-5,
-// then set up automations: tag applied → enter matching email sequence.
-
+// ─── CONVERTKIT INTEGRATION ───────────────────────────────────────────────────
 async function subscribeToConvertKit({ email, firstName, level }) {
   const levelData = LEVELS[level];
   if (!levelData) return;
@@ -255,7 +221,6 @@ async function subscribeToConvertKit({ email, firstName, level }) {
       console.log(`[CK] Subscribed ${email} with tag ${levelData.ckTag}`);
     }
   } catch (err) {
-    // Non-blocking — CK failure never prevents the user seeing their result
     console.error("ConvertKit error (non-blocking):", err);
   }
 }
@@ -307,7 +272,6 @@ export default function LedgerLiftDiagnostic() {
     setApiError(null);
     trackEvent(sessionId, { phase: "started", source: document.referrer || "direct", completed: false });
 
-    // Retry up to 2 times before falling back to hardcoded opener
     for (let attempt = 0; attempt < 2; attempt++) {
       try {
         const text = await callClaude([
@@ -370,7 +334,6 @@ export default function LedgerLiftDiagnostic() {
       }
     }
 
-    // Both attempts failed — show error with retry affordance
     setIsLoading(false);
     setApiError("Something went wrong. Try sending your message again, or book a call directly.");
   };
@@ -380,7 +343,6 @@ export default function LedgerLiftDiagnostic() {
   };
 
   // ── Submit email ──────────────────────────────────────────────────────────
-  // FIX #2: Now subscribes to ConvertKit with level tag before showing result
   const submitEmail = async (e) => {
     e.preventDefault();
     if (!email.trim()) return;
@@ -430,12 +392,10 @@ export default function LedgerLiftDiagnostic() {
             Answer a few questions and our AI advisor will identify your exact Financial Level and tell you precisely what your books need — whether that's a $17 template or a $997 reset.
           </p>
 
-          {/* Trust signal */}
           <p style={{ fontSize: 14, color: BRAND.gray, textAlign: "center", marginBottom: 40, fontStyle: "italic", maxWidth: 420 }}>
             Built by Renee Morrison — bookkeeper who's reviewed 100+ sets of bootstrap books.
           </p>
 
-          {/* Level preview pills */}
           <div style={{ display: "flex", gap: 8, marginBottom: 48, flexWrap: "wrap", justifyContent: "center" }}>
             {Object.entries(LEVELS).map(([num, l]) => (
               <div key={num} style={{ background: "white", border: `2px solid ${l.color}20`, borderRadius: 12, padding: "12px 16px", textAlign: "center", minWidth: 90 }}>
@@ -465,7 +425,6 @@ export default function LedgerLiftDiagnostic() {
       {phase === "chat" && (
         <div style={{ flex: 1, display: "flex", flexDirection: "column", maxWidth: 720, width: "100%", margin: "0 auto", padding: "24px 16px" }}>
 
-          {/* Progress bar */}
           <div style={{ marginBottom: 24 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -481,7 +440,6 @@ export default function LedgerLiftDiagnostic() {
             </div>
           </div>
 
-          {/* Messages */}
           <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: 16, marginBottom: 20, minHeight: 300, maxHeight: 420 }}>
             {messages.map((msg) => (
               <div key={msg.id} style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start", alignItems: "flex-end", gap: 10 }}>
@@ -503,7 +461,6 @@ export default function LedgerLiftDiagnostic() {
               </div>
             ))}
 
-            {/* Typing indicator */}
             {isLoading && (
               <div style={{ display: "flex", alignItems: "flex-end", gap: 10 }}>
                 <div style={{ width: 32, height: 32, background: BRAND.navy, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, color: "white", flexShrink: 0 }}>L</div>
@@ -515,7 +472,6 @@ export default function LedgerLiftDiagnostic() {
               </div>
             )}
 
-            {/* Error state with retry */}
             {apiError && (
               <div style={{ background: "#FEF3F2", border: "1px solid #FECDCA", borderRadius: 12, padding: "14px 18px", display: "flex", flexDirection: "column", gap: 8 }}>
                 <p style={{ fontSize: 14, color: "#912018", margin: 0 }}>{apiError}</p>
@@ -527,7 +483,7 @@ export default function LedgerLiftDiagnostic() {
                     Try again
                   </button>
                   <a
-                    href="https://ledger-lift-studio.kit.com/dddc0c1e86"
+                    href={CAL_LINK}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ fontSize: 13, color: BRAND.gray, textDecoration: "underline" }}
@@ -541,7 +497,6 @@ export default function LedgerLiftDiagnostic() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input bar */}
           <div style={{ display: "flex", gap: 12, background: "white", borderRadius: 16, padding: "8px 8px 8px 20px", border: `2px solid ${BRAND.navy}20`, boxShadow: "0 4px 24px rgba(0,0,0,0.06)" }}>
             <textarea
               ref={inputRef}
@@ -571,17 +526,31 @@ export default function LedgerLiftDiagnostic() {
           <div style={{ fontSize: 48, marginBottom: 24 }}>{pendingLevel ? LEVELS[pendingLevel].icon : "📊"}</div>
           <h2 style={{ fontSize: 28, color: BRAND.navy, textAlign: "center", marginBottom: 12, fontWeight: 700 }}>Your diagnosis is ready.</h2>
           <p style={{ fontSize: 16, color: BRAND.gray, textAlign: "center", lineHeight: 1.6, marginBottom: 40, maxWidth: 420 }}>
-            Enter your name and email to get your full Financial Health Report — your Financial Level, what it means, and your exact next step.
+            Your result is ready. Where should we send your Financial Level report and recommended next step?
           </p>
 
           {!emailSubmitted ? (
             <form onSubmit={submitEmail} style={{ width: "100%", display: "flex", flexDirection: "column", gap: 14 }}>
-              <input type="text" placeholder="Your first name" value={name} onChange={e => setName(e.target.value)} required
-                style={{ width: "100%", padding: "16px 20px", borderRadius: 12, border: `2px solid ${BRAND.navy}20`, fontSize: 16, color: BRAND.navy, background: "white", outline: "none", fontFamily: "Georgia,serif", boxSizing: "border-box" }} />
-              <input type="email" placeholder="Your email address" value={email} onChange={e => setEmail(e.target.value)} required
-                style={{ width: "100%", padding: "16px 20px", borderRadius: 12, border: `2px solid ${BRAND.navy}20`, fontSize: 16, color: BRAND.navy, background: "white", outline: "none", fontFamily: "Georgia,serif", boxSizing: "border-box" }} />
-              <button type="submit"
-                style={{ background: BRAND.navy, color: "white", border: "none", borderRadius: 12, padding: 18, fontSize: 16, fontWeight: 600, cursor: "pointer", fontFamily: "Georgia,serif", marginTop: 4, boxShadow: `0 8px 24px ${BRAND.navy}30` }}>
+              <input
+                type="text"
+                placeholder="Your first name"
+                value={name}
+                onChange={e => setName(e.target.value)}
+                required
+                style={{ width: "100%", padding: "16px 20px", borderRadius: 12, border: `2px solid ${BRAND.navy}20`, fontSize: 16, color: BRAND.navy, background: "white", outline: "none", fontFamily: "Georgia,serif", boxSizing: "border-box" }}
+              />
+              <input
+                type="email"
+                placeholder="Your email address"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                required
+                style={{ width: "100%", padding: "16px 20px", borderRadius: 12, border: `2px solid ${BRAND.navy}20`, fontSize: 16, color: BRAND.navy, background: "white", outline: "none", fontFamily: "Georgia,serif", boxSizing: "border-box" }}
+              />
+              <button
+                type="submit"
+                style={{ background: BRAND.navy, color: "white", border: "none", borderRadius: 12, padding: 18, fontSize: 16, fontWeight: 600, cursor: "pointer", fontFamily: "Georgia,serif", marginTop: 4, boxShadow: `0 8px 24px ${BRAND.navy}30` }}
+              >
                 Show My Financial Level →
               </button>
               <p style={{ textAlign: "center", fontSize: 12, color: BRAND.gray, marginTop: 4 }}>No spam. Unsubscribe anytime.</p>
@@ -605,14 +574,13 @@ export default function LedgerLiftDiagnostic() {
           <div style={{ background: level.color, color: "white", borderRadius: 20, padding: "32px 40px", textAlign: "center", width: "100%", marginBottom: 32, boxShadow: `0 16px 48px ${level.color}40`, boxSizing: "border-box" }}>
             <div style={{ fontSize: 48, marginBottom: 12 }}>{level.icon}</div>
             <div style={{ fontSize: 12, letterSpacing: "0.15em", textTransform: "uppercase", opacity: 0.8, marginBottom: 8 }}>Your Financial Level</div>
-            {/* Personalized with name if provided */}
             <h2 style={{ fontSize: 28, fontWeight: 700, margin: "0 0 4px 0" }}>
               {name ? `${name}, you're ${level.label}` : level.label}
             </h2>
             <div style={{ fontSize: 15, opacity: 0.85 }}>{level.revenue} annual revenue</div>
           </div>
 
-          {/* Diagnosis */}
+          {/* Diagnosis + Agitation */}
           <div style={{ background: "white", borderRadius: 16, padding: "24px 28px", width: "100%", marginBottom: 20, border: `2px solid ${level.color}30`, boxSizing: "border-box" }}>
             <p style={{ fontSize: 18, fontWeight: 700, color: BRAND.navy, margin: "0 0 12px 0" }}>{level.tagline}</p>
             <p style={{ fontSize: 15, color: BRAND.gray, lineHeight: 1.7, margin: 0 }}>{level.description}</p>
@@ -627,14 +595,22 @@ export default function LedgerLiftDiagnostic() {
             </div>
           </div>
 
-          {/* CTAs — primary to product, secondary to call */}
+          {/* CTAs */}
           <div style={{ display: "flex", flexDirection: "column", gap: 12, width: "100%" }}>
-            <a href={level.ctaLink} target="_blank" rel="noopener noreferrer"
-              style={{ background: level.color, color: "white", textDecoration: "none", borderRadius: 12, padding: 18, textAlign: "center", fontSize: 16, fontWeight: 600, display: "block", boxShadow: `0 8px 24px ${level.color}40`, boxSizing: "border-box" }}>
+            <a
+              href={level.ctaLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ background: level.color, color: "white", textDecoration: "none", borderRadius: 12, padding: 18, textAlign: "center", fontSize: 16, fontWeight: 600, display: "block", boxShadow: `0 8px 24px ${level.color}40`, boxSizing: "border-box" }}
+            >
               {level.cta}
             </a>
-            <a href={level.secondaryLink} target="_blank" rel="noopener noreferrer"
-              style={{ textAlign: "center", fontSize: 13, color: BRAND.gray, textDecoration: "underline", display: "block" }}>
+            <a
+              href={level.secondaryLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ textAlign: "center", fontSize: 13, color: BRAND.gray, textDecoration: "underline", display: "block" }}
+            >
               {level.secondary}
             </a>
           </div>
@@ -652,7 +628,8 @@ export default function LedgerLiftDiagnostic() {
               setQuestionCount(0);
               setApiError(null);
             }}
-            style={{ background: "transparent", border: "none", color: BRAND.gray, fontSize: 13, cursor: "pointer", marginTop: 32, textDecoration: "underline" }}>
+            style={{ background: "transparent", border: "none", color: BRAND.gray, fontSize: 13, cursor: "pointer", marginTop: 32, textDecoration: "underline" }}
+          >
             Retake the diagnostic
           </button>
         </div>
