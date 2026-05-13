@@ -208,7 +208,7 @@ async function trackEvent(sessionId, payload) {
 }
 // ─── MAIN COMPONENT ──────────────────────────────────────────────────────────
 export default function LedgerLiftDiagnostic() {
-  const [phase, setPhase] = useState("intro"); // intro | chat | email | result
+  const [phase, setPhase] = useState("intro"); // intro | chat | reveal | email | result
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -277,7 +277,8 @@ export default function LedgerLiftDiagnostic() {
           setMessages((prev) => [...prev, { role: "assistant", content: cleanText, id: Date.now() }]);
           setPendingLevel(level);
           trackEvent(sessionId, { phase: "diagnosed", level, completed: false });
-          setTimeout(() => setPhase("email"), 1800);
+          // ── NEW: go to reveal phase first, not email ──
+          setTimeout(() => setPhase("reveal"), 1800);
         } else {
           setMessages((prev) => [...prev, { role: "assistant", content: rawText, id: Date.now() }]);
           setQuestionCount((c) => Math.min(c + 1, MAX_QUESTIONS));
@@ -308,7 +309,7 @@ export default function LedgerLiftDiagnostic() {
     setDiagnosedLevel(pendingLevel);
     setTimeout(() => setPhase("result"), 600);
   };
-  const level = diagnosedLevel ? LEVELS[diagnosedLevel] : null;
+  const level = (diagnosedLevel ? LEVELS[diagnosedLevel] : null) || (pendingLevel ? LEVELS[pendingLevel] : null);
   const progressPct = Math.min((questionCount / MAX_QUESTIONS) * 100, 90);
   // ─────────────────────────────────────────────────────────────────────────
   return (
@@ -451,17 +452,49 @@ export default function LedgerLiftDiagnostic() {
         </div>
       )}
       {/* ══════════════════════════════════════════════════════════════════════
-          PHASE: EMAIL CAPTURE
+          PHASE: REVEAL — show level result before email gate
       ══════════════════════════════════════════════════════════════════════ */}
-      {phase === "email" && (
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "48px 24px", maxWidth: 560, margin: "0 auto", width: "100%" }}>
-          <div style={{ fontSize: 48, marginBottom: 24 }}>{pendingLevel ? LEVELS[pendingLevel].icon : "📊"}</div>
-          <h2 style={{ fontSize: 28, color: BRAND.navy, textAlign: "center", marginBottom: 12, fontWeight: 700 }}>Your diagnosis is ready.</h2>
-          <p style={{ fontSize: 16, color: BRAND.gray, textAlign: "center", lineHeight: 1.6, marginBottom: 40, maxWidth: 420 }}>
-            Your result is ready. Where should we send your Financial Level report and recommended next step?
-          </p>
+      {phase === "reveal" && pendingLevel && LEVELS[pendingLevel] && (
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "48px 24px", maxWidth: 600, margin: "0 auto", width: "100%" }}>
+          {/* Level reveal card */}
+          <div style={{
+            background: LEVELS[pendingLevel].color,
+            color: "white",
+            borderRadius: 24,
+            padding: "40px 40px 32px",
+            textAlign: "center",
+            width: "100%",
+            marginBottom: 28,
+            boxShadow: `0 20px 60px ${LEVELS[pendingLevel].color}50`,
+            boxSizing: "border-box",
+          }}>
+            <div style={{ fontSize: 56, marginBottom: 16 }}>{LEVELS[pendingLevel].icon}</div>
+            <div style={{ fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", opacity: 0.8, marginBottom: 10 }}>Your Financial Level</div>
+            <h2 style={{ fontSize: 32, fontWeight: 700, margin: "0 0 8px 0", lineHeight: 1.2 }}>{LEVELS[pendingLevel].label}</h2>
+            <div style={{ fontSize: 15, opacity: 0.85, marginBottom: 20 }}>{LEVELS[pendingLevel].revenue} annual revenue</div>
+            <div style={{ background: "rgba(255,255,255,0.15)", borderRadius: 12, padding: "16px 20px" }}>
+              <p style={{ fontSize: 16, lineHeight: 1.6, margin: 0, fontStyle: "italic" }}>{LEVELS[pendingLevel].tagline}</p>
+            </div>
+          </div>
+          {/* Teaser for what's behind the gate */}
+          <div style={{ background: "white", borderRadius: 16, padding: "24px 28px", width: "100%", marginBottom: 24, border: `2px solid ${BRAND.lightGray}`, boxSizing: "border-box" }}>
+            <p style={{ fontSize: 14, color: BRAND.gray, textAlign: "center", margin: "0 0 16px 0", fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase" }}>Your free report includes:</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {[
+                "Exactly what's costing you money right now",
+                "The recommended next step for your level",
+                "A clear action plan — no guessing",
+              ].map((item, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <div style={{ width: 20, height: 20, borderRadius: "50%", background: LEVELS[pendingLevel].color, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: "white", fontWeight: 700, flexShrink: 0 }}>✓</div>
+                  <span style={{ fontSize: 14, color: BRAND.navy }}>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* Email gate */}
           {!emailSubmitted ? (
-            <form onSubmit={submitEmail} style={{ width: "100%", display: "flex", flexDirection: "column", gap: 14 }}>
+            <form onSubmit={submitEmail} style={{ width: "100%", display: "flex", flexDirection: "column", gap: 12, boxSizing: "border-box" }}>
               <input
                 type="text"
                 placeholder="Your first name"
@@ -480,16 +513,16 @@ export default function LedgerLiftDiagnostic() {
               />
               <button
                 type="submit"
-                style={{ background: BRAND.navy, color: "white", border: "none", borderRadius: 12, padding: 18, fontSize: 16, fontWeight: 600, cursor: "pointer", fontFamily: "Georgia,serif", marginTop: 4, boxShadow: `0 8px 24px ${BRAND.navy}30` }}
+                style={{ background: LEVELS[pendingLevel].color, color: "white", border: "none", borderRadius: 12, padding: 18, fontSize: 16, fontWeight: 600, cursor: "pointer", fontFamily: "Georgia,serif", boxShadow: `0 8px 24px ${LEVELS[pendingLevel].color}40` }}
               >
-                Show My Financial Level →
+                Get My Full {LEVELS[pendingLevel].label} Report →
               </button>
-              <p style={{ textAlign: "center", fontSize: 12, color: BRAND.gray, marginTop: 4 }}>No spam. Unsubscribe anytime.</p>
+              <p style={{ textAlign: "center", fontSize: 12, color: BRAND.gray, margin: 0 }}>No spam. Unsubscribe anytime.</p>
             </form>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
               <div style={{ width: 60, height: 60, background: BRAND.sage, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, color: "white" }}>✓</div>
-              <p style={{ color: BRAND.sage, fontSize: 16 }}>Loading your results...</p>
+              <p style={{ color: BRAND.sage, fontSize: 16 }}>Loading your full report...</p>
             </div>
           )}
         </div>
