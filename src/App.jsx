@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+
 // ─── BRAND TOKENS ────────────────────────────────────────────────────────────
 const BRAND = {
   navy:      "#0F1F3D",
@@ -11,6 +12,7 @@ const BRAND = {
   gray:      "#6B7280",
   lightGray: "#F3F0EB",
 };
+
 // ─── SYSTEM PROMPT ───────────────────────────────────────────────────────────
 // eslint-disable-next-line no-unused-vars
 const SYSTEM_PROMPT = `You are a financial diagnostic advisor for LedgerLift Studio, a bookkeeping service built for bootstrap founders. Your job is to figure out which of the 5 Financial Levels a founder is at, then tell them clearly what they need — no fluff, no sales pitch.
@@ -70,6 +72,7 @@ This string will be hidden from the user and used to route them to the right res
 - If someone's revenue or situation puts them clearly at Level 1 or 2, you can make the diagnosis after Q3 — no need to force all 5 questions.
 - Keep responses short. 3–5 sentences max per message during the diagnostic. This is a conversation, not a report.
 - If someone asks what this tool is or who made it, say it's a free financial diagnostic — keep it brief and redirect to the questions.`;
+
 // ─── LEVELS ──────────────────────────────────────────────────────────────────
 const CAL_LINK = "https://cal.com/ledgerliftstudio/free-15-minute-books-reality-report";
 const LEVELS = {
@@ -154,7 +157,8 @@ const LEVELS = {
     ckTag: "Level 5 - Optimize & Master",
   },
 };
-// ─── API CALL (via Netlify Function) ─────────────────────────────────────────
+
+// ─── API CALL ─────────────────────────────────────────────────────────────────
 async function callClaude(messages) {
   const response = await fetch("/.netlify/functions/claude-proxy", {
     method: "POST",
@@ -168,7 +172,8 @@ async function callClaude(messages) {
   const data = await response.json();
   return data.content || "";
 }
-// ─── CONVERTKIT INTEGRATION ───────────────────────────────────────────────────
+
+// ─── CONVERTKIT ───────────────────────────────────────────────────────────────
 async function subscribeToConvertKit({ email, firstName, level }) {
   const levelData = LEVELS[level];
   if (!levelData) return;
@@ -176,22 +181,17 @@ async function subscribeToConvertKit({ email, firstName, level }) {
     const response = await fetch("/.netlify/functions/ck-proxy", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email,
-        firstName,
-        tag: levelData.ckTag,
-      }),
+      body: JSON.stringify({ email, firstName, tag: levelData.ckTag }),
     });
     if (!response.ok) {
       console.error("ConvertKit subscription failed:", await response.text().catch(() => ""));
-    } else {
-      console.log(`[CK] Subscribed ${email} with tag ${levelData.ckTag}`);
     }
   } catch (err) {
     console.error("ConvertKit error (non-blocking):", err);
   }
 }
-// ─── SESSION TRACKING ────────────────────────────────────────────────────────
+
+// ─── SESSION TRACKING ─────────────────────────────────────────────────────────
 function generateSessionId() {
   return `diag_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
 }
@@ -206,9 +206,10 @@ async function trackEvent(sessionId, payload) {
     // Tracking never breaks the diagnostic experience
   }
 }
+
 // ─── MAIN COMPONENT ──────────────────────────────────────────────────────────
 export default function LedgerLiftDiagnostic() {
-  const [phase, setPhase] = useState("intro"); // intro | chat | reveal | email | result
+  const [phase, setPhase] = useState("intro");
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -223,10 +224,11 @@ export default function LedgerLiftDiagnostic() {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const MAX_QUESTIONS = 5;
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-  // ── Start diagnostic ──────────────────────────────────────────────────────
+
   const startDiagnostic = async () => {
     setPhase("chat");
     setIsLoading(true);
@@ -246,7 +248,6 @@ export default function LedgerLiftDiagnostic() {
         if (attempt < 1) await new Promise(r => setTimeout(r, 1500));
       }
     }
-    // Fallback if both attempts fail
     setMessages([{
       role: "assistant",
       content: "Hey! I'm your financial advisor. Let's figure out exactly where your books stand.\n\nFirst question — roughly what's your annual revenue right now? Ballpark is fine.",
@@ -256,7 +257,7 @@ export default function LedgerLiftDiagnostic() {
     setIsLoading(false);
     setTimeout(() => inputRef.current?.focus(), 100);
   };
-  // ── Send message ──────────────────────────────────────────────────────────
+
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
     const userMsg = { role: "user", content: input.trim(), id: Date.now() };
@@ -277,7 +278,6 @@ export default function LedgerLiftDiagnostic() {
           setMessages((prev) => [...prev, { role: "assistant", content: cleanText, id: Date.now() }]);
           setPendingLevel(level);
           trackEvent(sessionId, { phase: "diagnosed", level, completed: false });
-          // ── NEW: go to reveal phase first, not email ──
           setTimeout(() => setPhase("reveal"), 1800);
         } else {
           setMessages((prev) => [...prev, { role: "assistant", content: rawText, id: Date.now() }]);
@@ -292,28 +292,27 @@ export default function LedgerLiftDiagnostic() {
     setIsLoading(false);
     setApiError("Something went wrong. Try sending your message again, or book a call directly.");
   };
+
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
   };
-  // ── Submit email ──────────────────────────────────────────────────────────
+
   const submitEmail = async (e) => {
     e.preventDefault();
     if (!email.trim()) return;
     setEmailSubmitted(true);
-    await subscribeToConvertKit({
-      email: email.trim(),
-      firstName: name.trim() || undefined,
-      level: pendingLevel,
-    });
+    await subscribeToConvertKit({ email: email.trim(), firstName: name.trim() || undefined, level: pendingLevel });
     trackEvent(sessionId, { phase: "converted", level: pendingLevel, name, email, completed: true });
     setDiagnosedLevel(pendingLevel);
     setTimeout(() => setPhase("result"), 600);
   };
+
   const level = (diagnosedLevel ? LEVELS[diagnosedLevel] : null) || (pendingLevel ? LEVELS[pendingLevel] : null);
   const progressPct = Math.min((questionCount / MAX_QUESTIONS) * 100, 90);
-  // ─────────────────────────────────────────────────────────────────────────
+
   return (
     <div style={{ fontFamily: "'Georgia','Times New Roman',serif", minHeight: "100vh", background: BRAND.cream, display: "flex", flexDirection: "column" }}>
+
       {/* ── Header ── */}
       <header style={{ background: BRAND.navy, padding: "16px 32px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
@@ -322,23 +321,28 @@ export default function LedgerLiftDiagnostic() {
         </div>
         <span style={{ color: BRAND.gold, fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase" }}>Financial Diagnostic</span>
       </header>
-      {/* ══════════════════════════════════════════════════════════════════════
-          PHASE: INTRO
-      ══════════════════════════════════════════════════════════════════════ */}
+
+      {/* ══ PHASE: INTRO ══ */}
       {phase === "intro" && (
         <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "48px 24px", maxWidth: 680, margin: "0 auto", width: "100%" }}>
           <div style={{ background: BRAND.gold, color: BRAND.navy, fontSize: 11, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", padding: "6px 16px", borderRadius: 100, marginBottom: 32 }}>
             Free · 5 Minutes · No Pitch
           </div>
+
+          {/* ── UPDATED HEADLINE ── */}
           <h1 style={{ fontSize: "clamp(28px,5vw,44px)", color: BRAND.navy, textAlign: "center", lineHeight: 1.2, marginBottom: 20, fontWeight: 700 }}>
-            What Financial Level<br />Are You Actually At?
+            Why Do Your Numbers<br />Never Make Sense?
           </h1>
+
+          {/* ── UPDATED SUBHEAD ── */}
           <p style={{ fontSize: 18, color: BRAND.gray, textAlign: "center", lineHeight: 1.7, marginBottom: 28, maxWidth: 520 }}>
-            Answer a few questions and our AI advisor will identify your exact Financial Level and tell you precisely what your books need — whether that's a $17 template or a $997 reset.
+            Answer 6 quick questions and we'll tell you exactly what's broken in your books and the fastest way to fix it — without hiring a $5K/month bookkeeper.
           </p>
+
           <p style={{ fontSize: 14, color: BRAND.gray, textAlign: "center", marginBottom: 40, fontStyle: "italic", maxWidth: 420 }}>
             Built by Renee Morrison — bookkeeper who's reviewed 100+ sets of bootstrap books.
           </p>
+
           <div style={{ display: "flex", gap: 8, marginBottom: 48, flexWrap: "wrap", justifyContent: "center" }}>
             {Object.entries(LEVELS).map(([num, l]) => (
               <div key={num} style={{ background: "white", border: `2px solid ${l.color}20`, borderRadius: 12, padding: "12px 16px", textAlign: "center", minWidth: 90 }}>
@@ -348,20 +352,21 @@ export default function LedgerLiftDiagnostic() {
               </div>
             ))}
           </div>
+
+          {/* ── UPDATED BUTTON ── */}
           <button
             onClick={startDiagnostic}
             style={{ background: BRAND.navy, color: "white", border: "none", borderRadius: 12, padding: "18px 48px", fontSize: 17, fontWeight: 600, cursor: "pointer", letterSpacing: "0.02em", fontFamily: "Georgia,serif", boxShadow: `0 8px 32px ${BRAND.navy}40` }}
             onMouseEnter={e => { e.target.style.background = BRAND.navyLight; e.target.style.transform = "translateY(-2px)"; }}
             onMouseLeave={e => { e.target.style.background = BRAND.navy; e.target.style.transform = "translateY(0)"; }}
           >
-            Start My Free Diagnostic →
+            Show Me What's Wrong →
           </button>
           <p style={{ marginTop: 20, fontSize: 13, color: BRAND.gray, textAlign: "center" }}>No signup required to start. Takes about 5 minutes.</p>
         </div>
       )}
-      {/* ══════════════════════════════════════════════════════════════════════
-          PHASE: CHAT
-      ══════════════════════════════════════════════════════════════════════ */}
+
+      {/* ══ PHASE: CHAT ══ */}
       {phase === "chat" && (
         <div style={{ flex: 1, display: "flex", flexDirection: "column", maxWidth: 720, width: "100%", margin: "0 auto", padding: "24px 16px" }}>
           <div style={{ marginBottom: 24 }}>
@@ -370,14 +375,13 @@ export default function LedgerLiftDiagnostic() {
                 <div style={{ width: 8, height: 8, borderRadius: "50%", background: BRAND.sage }} />
                 <span style={{ fontSize: 13, color: BRAND.gray }}>Diagnostic in progress</span>
               </div>
-              <span style={{ fontSize: 12, color: BRAND.gray }}>
-                Question {Math.min(questionCount, MAX_QUESTIONS)} of {MAX_QUESTIONS}
-              </span>
+              <span style={{ fontSize: 12, color: BRAND.gray }}>Question {Math.min(questionCount, MAX_QUESTIONS)} of {MAX_QUESTIONS}</span>
             </div>
             <div style={{ height: 4, background: BRAND.lightGray, borderRadius: 2, overflow: "hidden" }}>
               <div style={{ height: "100%", width: `${progressPct}%`, background: BRAND.sage, borderRadius: 2, transition: "width 0.4s ease" }} />
             </div>
           </div>
+
           <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: 16, marginBottom: 20, minHeight: 300, maxHeight: 420 }}>
             {messages.map((msg) => (
               <div key={msg.id} style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start", alignItems: "flex-end", gap: 10 }}>
@@ -412,25 +416,14 @@ export default function LedgerLiftDiagnostic() {
               <div style={{ background: "#FEF3F2", border: "1px solid #FECDCA", borderRadius: 12, padding: "14px 18px", display: "flex", flexDirection: "column", gap: 8 }}>
                 <p style={{ fontSize: 14, color: "#912018", margin: 0 }}>{apiError}</p>
                 <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-                  <button
-                    onClick={() => { setApiError(null); sendMessage(); }}
-                    style={{ background: BRAND.navy, color: "white", border: "none", borderRadius: 8, padding: "8px 16px", fontSize: 13, cursor: "pointer", fontFamily: "Georgia,serif" }}
-                  >
-                    Try again
-                  </button>
-                  <a
-                    href={CAL_LINK}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ fontSize: 13, color: BRAND.gray, textDecoration: "underline" }}
-                  >
-                    Book a call instead
-                  </a>
+                  <button onClick={() => { setApiError(null); sendMessage(); }} style={{ background: BRAND.navy, color: "white", border: "none", borderRadius: 8, padding: "8px 16px", fontSize: 13, cursor: "pointer", fontFamily: "Georgia,serif" }}>Try again</button>
+                  <a href={CAL_LINK} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: BRAND.gray, textDecoration: "underline" }}>Book a call instead</a>
                 </div>
               </div>
             )}
             <div ref={messagesEndRef} />
           </div>
+
           <div style={{ display: "flex", gap: 12, background: "white", borderRadius: 16, padding: "8px 8px 8px 20px", border: `2px solid ${BRAND.navy}20`, boxShadow: "0 4px 24px rgba(0,0,0,0.06)" }}>
             <textarea
               ref={inputRef}
@@ -451,23 +444,11 @@ export default function LedgerLiftDiagnostic() {
           </div>
         </div>
       )}
-      {/* ══════════════════════════════════════════════════════════════════════
-          PHASE: REVEAL — show level result before email gate
-      ══════════════════════════════════════════════════════════════════════ */}
+
+      {/* ══ PHASE: REVEAL ══ */}
       {phase === "reveal" && pendingLevel && LEVELS[pendingLevel] && (
         <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "48px 24px", maxWidth: 600, margin: "0 auto", width: "100%" }}>
-          {/* Level reveal card */}
-          <div style={{
-            background: LEVELS[pendingLevel].color,
-            color: "white",
-            borderRadius: 24,
-            padding: "40px 40px 32px",
-            textAlign: "center",
-            width: "100%",
-            marginBottom: 28,
-            boxShadow: `0 20px 60px ${LEVELS[pendingLevel].color}50`,
-            boxSizing: "border-box",
-          }}>
+          <div style={{ background: LEVELS[pendingLevel].color, color: "white", borderRadius: 24, padding: "40px 40px 32px", textAlign: "center", width: "100%", marginBottom: 28, boxShadow: `0 20px 60px ${LEVELS[pendingLevel].color}50`, boxSizing: "border-box" }}>
             <div style={{ fontSize: 56, marginBottom: 16 }}>{LEVELS[pendingLevel].icon}</div>
             <div style={{ fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", opacity: 0.8, marginBottom: 10 }}>Your Financial Level</div>
             <h2 style={{ fontSize: 32, fontWeight: 700, margin: "0 0 8px 0", lineHeight: 1.2 }}>{LEVELS[pendingLevel].label}</h2>
@@ -476,15 +457,11 @@ export default function LedgerLiftDiagnostic() {
               <p style={{ fontSize: 16, lineHeight: 1.6, margin: 0, fontStyle: "italic" }}>{LEVELS[pendingLevel].tagline}</p>
             </div>
           </div>
-          {/* Teaser for what's behind the gate */}
+
           <div style={{ background: "white", borderRadius: 16, padding: "24px 28px", width: "100%", marginBottom: 24, border: `2px solid ${BRAND.lightGray}`, boxSizing: "border-box" }}>
             <p style={{ fontSize: 14, color: BRAND.gray, textAlign: "center", margin: "0 0 16px 0", fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase" }}>Your free report includes:</p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {[
-                "Exactly what's costing you money right now",
-                "The recommended next step for your level",
-                "A clear action plan — no guessing",
-              ].map((item, i) => (
+              {["Exactly what's costing you money right now", "The recommended next step for your level", "A clear action plan — no guessing"].map((item, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <div style={{ width: 20, height: 20, borderRadius: "50%", background: LEVELS[pendingLevel].color, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: "white", fontWeight: 700, flexShrink: 0 }}>✓</div>
                   <span style={{ fontSize: 14, color: BRAND.navy }}>{item}</span>
@@ -492,29 +469,12 @@ export default function LedgerLiftDiagnostic() {
               ))}
             </div>
           </div>
-          {/* Email gate */}
+
           {!emailSubmitted ? (
             <form onSubmit={submitEmail} style={{ width: "100%", display: "flex", flexDirection: "column", gap: 12, boxSizing: "border-box" }}>
-              <input
-                type="text"
-                placeholder="Your first name"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                required
-                style={{ width: "100%", padding: "16px 20px", borderRadius: 12, border: `2px solid ${BRAND.navy}20`, fontSize: 16, color: BRAND.navy, background: "white", outline: "none", fontFamily: "Georgia,serif", boxSizing: "border-box" }}
-              />
-              <input
-                type="email"
-                placeholder="Your email address"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                required
-                style={{ width: "100%", padding: "16px 20px", borderRadius: 12, border: `2px solid ${BRAND.navy}20`, fontSize: 16, color: BRAND.navy, background: "white", outline: "none", fontFamily: "Georgia,serif", boxSizing: "border-box" }}
-              />
-              <button
-                type="submit"
-                style={{ background: LEVELS[pendingLevel].color, color: "white", border: "none", borderRadius: 12, padding: 18, fontSize: 16, fontWeight: 600, cursor: "pointer", fontFamily: "Georgia,serif", boxShadow: `0 8px 24px ${LEVELS[pendingLevel].color}40` }}
-              >
+              <input type="text" placeholder="Your first name" value={name} onChange={e => setName(e.target.value)} required style={{ width: "100%", padding: "16px 20px", borderRadius: 12, border: `2px solid ${BRAND.navy}20`, fontSize: 16, color: BRAND.navy, background: "white", outline: "none", fontFamily: "Georgia,serif", boxSizing: "border-box" }} />
+              <input type="email" placeholder="Your email address" value={email} onChange={e => setEmail(e.target.value)} required style={{ width: "100%", padding: "16px 20px", borderRadius: 12, border: `2px solid ${BRAND.navy}20`, fontSize: 16, color: BRAND.navy, background: "white", outline: "none", fontFamily: "Georgia,serif", boxSizing: "border-box" }} />
+              <button type="submit" style={{ background: LEVELS[pendingLevel].color, color: "white", border: "none", borderRadius: 12, padding: 18, fontSize: 16, fontWeight: 600, cursor: "pointer", fontFamily: "Georgia,serif", boxShadow: `0 8px 24px ${LEVELS[pendingLevel].color}40` }}>
                 Get My Full {LEVELS[pendingLevel].label} Report →
               </button>
               <p style={{ textAlign: "center", fontSize: 12, color: BRAND.gray, margin: 0 }}>No spam. Unsubscribe anytime.</p>
@@ -527,26 +487,22 @@ export default function LedgerLiftDiagnostic() {
           )}
         </div>
       )}
-      {/* ══════════════════════════════════════════════════════════════════════
-          PHASE: RESULT
-      ══════════════════════════════════════════════════════════════════════ */}
+
+      {/* ══ PHASE: RESULT ══ */}
       {phase === "result" && level && (
         <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", padding: "48px 24px", maxWidth: 680, margin: "0 auto", width: "100%" }}>
-          {/* Level badge */}
           <div style={{ background: level.color, color: "white", borderRadius: 20, padding: "32px 40px", textAlign: "center", width: "100%", marginBottom: 32, boxShadow: `0 16px 48px ${level.color}40`, boxSizing: "border-box" }}>
             <div style={{ fontSize: 48, marginBottom: 12 }}>{level.icon}</div>
             <div style={{ fontSize: 12, letterSpacing: "0.15em", textTransform: "uppercase", opacity: 0.8, marginBottom: 8 }}>Your Financial Level</div>
-            <h2 style={{ fontSize: 28, fontWeight: 700, margin: "0 0 4px 0" }}>
-              {name ? `${name}, you're ${level.label}` : level.label}
-            </h2>
+            <h2 style={{ fontSize: 28, fontWeight: 700, margin: "0 0 4px 0" }}>{name ? `${name}, you're ${level.label}` : level.label}</h2>
             <div style={{ fontSize: 15, opacity: 0.85 }}>{level.revenue} annual revenue</div>
           </div>
-          {/* Diagnosis + Agitation */}
+
           <div style={{ background: "white", borderRadius: 16, padding: "24px 28px", width: "100%", marginBottom: 20, border: `2px solid ${level.color}30`, boxSizing: "border-box" }}>
             <p style={{ fontSize: 18, fontWeight: 700, color: BRAND.navy, margin: "0 0 12px 0" }}>{level.tagline}</p>
             <p style={{ fontSize: 15, color: BRAND.gray, lineHeight: 1.7, margin: 0 }}>{level.description}</p>
           </div>
-          {/* Recommendation */}
+
           <div style={{ background: BRAND.navy, borderRadius: 16, padding: "24px 28px", width: "100%", marginBottom: 20, boxSizing: "border-box" }}>
             <div style={{ fontSize: 11, color: BRAND.gold, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 8 }}>Our Recommendation</div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
@@ -554,44 +510,25 @@ export default function LedgerLiftDiagnostic() {
               <div style={{ fontSize: 22, fontWeight: 700, color: BRAND.gold }}>{level.price}</div>
             </div>
           </div>
-          {/* CTAs */}
+
           <div style={{ display: "flex", flexDirection: "column", gap: 12, width: "100%" }}>
-            <a
-              href={level.ctaLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ background: level.color, color: "white", textDecoration: "none", borderRadius: 12, padding: 18, textAlign: "center", fontSize: 16, fontWeight: 600, display: "block", boxShadow: `0 8px 24px ${level.color}40`, boxSizing: "border-box" }}
-            >
+            <a href={level.ctaLink} target="_blank" rel="noopener noreferrer" style={{ background: level.color, color: "white", textDecoration: "none", borderRadius: 12, padding: 18, textAlign: "center", fontSize: 16, fontWeight: 600, display: "block", boxShadow: `0 8px 24px ${level.color}40`, boxSizing: "border-box" }}>
               {level.cta}
             </a>
-            <a
-              href={level.secondaryLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ textAlign: "center", fontSize: 13, color: BRAND.gray, textDecoration: "underline", display: "block" }}
-            >
+            <a href={level.secondaryLink} target="_blank" rel="noopener noreferrer" style={{ textAlign: "center", fontSize: 13, color: BRAND.gray, textDecoration: "underline", display: "block" }}>
               {level.secondary}
             </a>
           </div>
-          {/* Retake */}
+
           <button
-            onClick={() => {
-              setPhase("intro");
-              setMessages([]);
-              setDiagnosedLevel(null);
-              setPendingLevel(null);
-              setEmail("");
-              setName("");
-              setEmailSubmitted(false);
-              setQuestionCount(0);
-              setApiError(null);
-            }}
+            onClick={() => { setPhase("intro"); setMessages([]); setDiagnosedLevel(null); setPendingLevel(null); setEmail(""); setName(""); setEmailSubmitted(false); setQuestionCount(0); setApiError(null); }}
             style={{ background: "transparent", border: "none", color: BRAND.gray, fontSize: 13, cursor: "pointer", marginTop: 32, textDecoration: "underline" }}
           >
             Retake the diagnostic
           </button>
         </div>
       )}
+
       <style>{`
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
         @keyframes bounce { 0%,80%,100%{transform:translateY(0);opacity:0.4} 40%{transform:translateY(-6px);opacity:1} }
