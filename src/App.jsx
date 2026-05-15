@@ -336,7 +336,7 @@ export default function LedgerLiftDiagnostic() {
 
           {/* ── UPDATED SUBHEAD ── */}
           <p style={{ fontSize: 18, color: BRAND.gray, textAlign: "center", lineHeight: 1.7, marginBottom: 28, maxWidth: 520 }}>
-            Answer 6 quick questions and we'll tell you exactly what's broken in your books and the fastest way to fix it — without hiring a $5K/month bookkeeper.
+            Answer 5 quick questions and we'll tell you exactly what's broken in your books and the fastest way to fix it — without hiring a $5K/month bookkeeper.
           </p>
 
           <p style={{ fontSize: 14, color: BRAND.gray, textAlign: "center", marginBottom: 40, fontStyle: "italic", maxWidth: 420 }}>
