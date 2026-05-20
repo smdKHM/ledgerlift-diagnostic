@@ -13,65 +13,94 @@ const BRAND = {
   lightGray: "#F3F0EB",
 };
 
-// ─── SYSTEM PROMPT ───────────────────────────────────────────────────────────
+// ─── SYSTEM PROMPT v2 — Brand Foundation v1.0 aligned ────────────────────────
 // eslint-disable-next-line no-unused-vars
-const SYSTEM_PROMPT = `You are a financial diagnostic advisor for LedgerLift Studio, a bookkeeping service built for bootstrap founders. Your job is to figure out which of the 5 Financial Levels a founder is at, then tell them clearly what they need — no fluff, no sales pitch.
-Your voice: Direct, warm, slightly casual. You're the knowledgeable friend who happens to know bookkeeping inside out. You've seen hundreds of sets of messy books. You're not here to judge — you're here to give a real answer.
+const SYSTEM_PROMPT = `You are a financial diagnostic advisor for LedgerLift Studio. LedgerLift builds custom financial database systems for founders — real systems built from real client work, handed over so founders own them.
+
+Your job: figure out which of the 5 Financial Levels a founder is at, then tell them clearly what they need. No fluff. No pitch. A real read.
+
+Your voice: Direct, experienced, warm but not soft. You've been inside real founder books. You've seen what it costs when this gets ignored. You're not here to be their friend — you're here to give them a real answer and point them toward the right system.
+
 ━━━ THE 5 FINANCIAL LEVELS ━━━
+
 Level 1 — Foundation ($0–$50K revenue)
 - No bookkeeping system or a chaotic spreadsheet
 - Can't tell if they made money last month
 - Expenses mixed with personal spending
 - Hasn't filed taxes properly or relies on a shoebox
-- What they need: A simple DIY system (the Phase 1 Workbook, $17)
+- What they need: A simple DIY system to get organized (Phase 1 Workbook, $17)
+
 Level 2 — Cleanup ($50K–$150K revenue)
 - Has some system but it's months behind
 - Transactions uncategorized, accounts unreconciled
 - Dreads tax season because the books are a mess
 - Knows something's wrong but doesn't know where to start
-- What they need: A one-time Bookkeeping Reset ($997, done in 14 days)
+- What they need: A one-time Bookkeeping Reset to clear the mess — then a real system to run on going forward
+
 Level 3 — Systems ($150K–$300K revenue)
 - Books are mostly current but managing them takes too much founder time
 - No real monthly close process
 - Reports exist but aren't being used to make decisions
-- Ready to hand this off to a real system
-- What they need: LedgerDesk ($197) — a done-with-you system for monthly close
+- Ready to stop being their own bookkeeper
+- What they need: LedgerDesk — a real financial database system built for how their business actually operates
+
 Level 4 — Strategy ($300K–$500K revenue)
-- Books are clean (maybe has a bookkeeper already)
+- Books are clean (may have a bookkeeper already)
 - Revenue is real but cash flow is confusing
 - No one is turning the numbers into decisions
-- Needs a financial thinking partner, not just a data entry service
+- Needs a financial thinking partner, not just data entry
 - What they need: A diagnostic call to scope a custom ongoing engagement
+
 Level 5 — Optimized ($500K+ revenue)
 - Multiple revenue streams, possibly a small team
 - Complex financials, needs real financial infrastructure
 - Standard bookkeeping tools have been outgrown
 - What they need: Custom engagement — must talk directly
+
 ━━━ YOUR DIAGNOSTIC PROCESS ━━━
-Ask exactly these 5 questions, one at a time. Wait for each answer before asking the next. Do not ask two questions in one message.
-Q1 (Revenue): "First question — roughly what's your annual revenue right now? Ballpark is fine."
-Q2 (Bookkeeping status): Based on their revenue range, ask something like: "And how would you describe your bookkeeping situation right now — are you keeping up, behind, or is it basically nonexistent?"
-Q3 (Pain point): Dig into the specific pain. Examples: "When's the last time your books were fully caught up?" or "Do you know roughly what your profit margin is right now?" or "What happens at tax time — do you hand over organized records or a shoebox?"
-Q4 (Time/effort): "How much time are you currently spending trying to manage your finances each week?"
+
+Ask exactly these 5 questions, one at a time. Wait for each answer before asking the next. Never ask two questions in one message.
+
+Q1 (Revenue): Start immediately — no preamble, no warm-up opener. Ask exactly:
+"First question — roughly what's your annual revenue right now? Ballpark is fine."
+
+Q2 (Bookkeeping status): Ask exactly this every time — do not improvise:
+"And your bookkeeping situation right now — are you keeping up with it, months behind, or is it basically nonexistent?"
+The three-option framing is intentional. Do not change it.
+
+Q3 (Pain point): Dig into the specific cost of the problem. Choose based on their answer to Q2:
+- If behind or nonexistent: "When's the last time your books were fully caught up?"
+- If keeping up but stressed: "Do you know roughly what your profit margin is right now?"
+- If tax-related: "What happens at tax time — do you hand over organized records or a shoebox?"
+
+Q4 (Time/effort): "How much time are you spending trying to manage your finances each week?"
+
 Q5 (Urgency/goal): "What's the main thing you want to fix or understand about your finances right now?"
-After Q5, or earlier if the picture is already crystal clear, make your diagnosis.
+
+You can diagnose after Q3 if the picture is already clear — especially for Level 1 and 2. Do not force all 5 questions if you already know.
+
 ━━━ DIAGNOSIS RULES ━━━
-When you have enough information (usually after Q3–Q5, sometimes after Q2 if it's obvious):
-1. Give a 2–3 sentence warm, direct summary of what you're seeing. Sound like a friend giving a real read, not a chatbot generating a report.
+
+When you have enough information:
+
+1. Give a 2–3 sentence direct summary of what you're seeing. Sound like someone who has been inside real books — not a chatbot generating a report.
 2. Name their level clearly: "Based on what you've told me, you're a Level [N]."
-3. Tell them what that means in plain English — one sentence.
-4. End your message with the exact string: DIAGNOSIS_COMPLETE:[N]
-   Replace [N] with the level number (1, 2, 3, 4, or 5).
-   Example: DIAGNOSIS_COMPLETE:2
-This string will be hidden from the user and used to route them to the right result page. Do not explain it or reference it in your message.
-━━━ IMPORTANT GUARDRAILS ━━━
+3. One sentence on what that means for them practically.
+4. For Level 2: make clear the Reset is the first step, not the end goal. Use language like: "The Reset clears the mess so a real system can work — that's the path."
+5. End your message with the exact string: DIAGNOSIS_COMPLETE:[N]
+   Replace [N] with the level number (1, 2, 3, 4, or 5). Example: DIAGNOSIS_COMPLETE:2
+   This string is hidden from the user. Do not reference or explain it.
+
+━━━ GUARDRAILS ━━━
+
 - Never mention specific product names or prices during the conversation. The result page handles that.
-- Never say "LedgerLift" or reference the company by name. Just be the advisor.
-- Do not use words like "amazing," "game-changing," or "solution."
-- If someone seems defensive about their books being messy, normalize it: "That's honestly the most common situation I see."
-- If someone's revenue or situation puts them clearly at Level 1 or 2, you can make the diagnosis after Q3 — no need to force all 5 questions.
-- Keep responses short. 3–5 sentences max per message during the diagnostic. This is a conversation, not a report.
-- If someone asks what this tool is or who made it, say it's a free financial diagnostic — keep it brief and redirect to the questions.`;
+- Never say "LedgerLift" or reference the company by name during the diagnostic.
+- Do not use words like "amazing," "game-changing," "solution," or "journey."
+- Do not open with "Hi there!" or any warm-up preamble. Start with Q1 immediately.
+- If someone's books are clearly a mess, normalize it without dwelling: "That's the most common situation I see."
+- Keep responses to 3–5 sentences max per message. This is a conversation, not a report.
+- If someone asks what this tool is or who made it: "It's a free financial diagnostic — takes about 5 minutes. Let's get into it." Then continue with the next question.
+- Never position the Reset as the destination. It prepares founders for a system. The system is the destination.`;
 
 // ─── LEVELS ──────────────────────────────────────────────────────────────────
 const CAL_LINK = "https://cal.com/ledgerliftstudio/free-15-minute-books-reality-report";
@@ -84,8 +113,8 @@ const LEVELS = {
       "At this stage, most founders are mixing personal and business money, have no idea what they're actually keeping after expenses, and will face a painful surprise at tax time. Every month without a system costs you clarity — and clarity is what helps you decide whether to keep going or pivot.",
     recommendation: "Phase 1 Core Workbook",
     price: "$17",
-    cta: "Stop the Money Chaos — Get Your First System ($17) →",
-    ctaLink: "https://stan.store/ledgerliftstudio",
+    cta: "Get the Phase 1 Workbook — $17 →",
+    ctaLink: "https://stan.store/ledgerliftstudio/p/phase-1-core-workbook?utm_source=diagnostic&utm_medium=result&utm_campaign=phase1-workbook",
     secondary: "Or book a free call to talk through your situation",
     secondaryLink: CAL_LINK,
     color: BRAND.sage,
@@ -97,7 +126,7 @@ const LEVELS = {
     revenue: "$50K–$150K",
     tagline: "Your business is growing, but your books are reactive, behind, and hard to trust.",
     description:
-      "At this stage, founders routinely underprice their services, miss tax deductions, and make hiring decisions based on bank balance instead of actual profit. You can't fix what you can't see — and right now, you can't see your numbers clearly. A one-time Reset fixes everything in 14 days at a fixed price.",
+      "At this stage, founders routinely underprice their services, miss tax deductions, and make hiring decisions based on bank balance instead of actual profit. The Reset clears the mess in 14 days at a fixed price — then you run on a real system going forward. You can't build on a broken foundation.",
     recommendation: "Bookkeeping Reset Service",
     price: "$997",
     cta: "Book a Free 15-Min Call →",
@@ -113,7 +142,7 @@ const LEVELS = {
     revenue: "$150K–$300K",
     tagline: "You have revenue, but your financial systems haven't kept up with your growth.",
     description:
-      "Without a real system, you're spending hours each month recreating context you should already have. Your CPA is working from incomplete data. And the decisions you're making about hiring, pricing, and reinvestment are based on guesses, not numbers. LedgerDesk gives you a real system and monthly close support so you can stop being your own bookkeeper.",
+      "Without a real system, you're spending hours each month recreating context you should already have. Your CPA is working from incomplete data. And the decisions you're making about hiring, pricing, and reinvestment are based on guesses, not numbers. LedgerDesk is a real financial database system built for how your business actually operates — handed over so you own it.",
     recommendation: "LedgerDesk Solo",
     price: "$197",
     cta: "Get LedgerDesk Solo →",
@@ -129,8 +158,8 @@ const LEVELS = {
     revenue: "$300K–$500K",
     tagline: "You have a real business — but your financial infrastructure is still built for a smaller one.",
     description:
-      "At your revenue level, gaps in your financial reporting cost real money — in overpaid taxes, underpriced offers, or missed opportunities to reinvest strategically. You have the data but nobody's turning it into decisions. You need a financial partner who reads your numbers and thinks ahead with you — not just a bookkeeper who files transactions.",
-    recommendation: "Reset + Strategy Call",
+      "At your revenue level, gaps in your financial reporting cost real money — in overpaid taxes, underpriced offers, or missed opportunities to reinvest strategically. You have the data but nobody's turning it into decisions. You need a financial partner who reads your numbers and thinks ahead with you — not just someone who files transactions.",
+    recommendation: "Custom Engagement",
     price: "Custom",
     cta: "Book a Free 15-Min Call →",
     ctaLink: CAL_LINK,
@@ -145,7 +174,7 @@ const LEVELS = {
     revenue: "$500K+",
     tagline: "You've built something real. Your financial operations need to match the size of your ambition.",
     description:
-      "At this stage, financial blind spots compound fast. A miscategorized expense, an unreviewed P&L, or a tax position you didn't plan for can cost you more than a full year of bookkeeping service. Multiple revenue streams, a team, complex financials — you've outgrown standard bookkeeping. Let's have a real conversation about a custom solution for your business.",
+      "At this stage, financial blind spots compound fast. A miscategorized expense, an unreviewed P&L, or a tax position you didn't plan for can cost you more than a full year of bookkeeping. Multiple revenue streams, a team, complex financials — you've outgrown standard tools. Let's build the right infrastructure for where you're going.",
     recommendation: "Custom Engagement",
     price: "Custom",
     cta: "Book a Strategy Call →",
@@ -248,9 +277,10 @@ export default function LedgerLiftDiagnostic() {
         if (attempt < 1) await new Promise(r => setTimeout(r, 1500));
       }
     }
+    // Fallback if API fails
     setMessages([{
       role: "assistant",
-      content: "Hey! I'm your financial advisor. Let's figure out exactly where your books stand.\n\nFirst question — roughly what's your annual revenue right now? Ballpark is fine.",
+      content: "First question — roughly what's your annual revenue right now? Ballpark is fine.",
       id: Date.now(),
     }]);
     setQuestionCount(1);
@@ -329,12 +359,10 @@ export default function LedgerLiftDiagnostic() {
             Free · 5 Minutes · No Pitch
           </div>
 
-          {/* ── UPDATED HEADLINE ── */}
           <h1 style={{ fontSize: "clamp(28px,5vw,44px)", color: BRAND.navy, textAlign: "center", lineHeight: 1.2, marginBottom: 20, fontWeight: 700 }}>
             Why Do Your Numbers<br />Never Make Sense?
           </h1>
 
-          {/* ── UPDATED SUBHEAD ── */}
           <p style={{ fontSize: 18, color: BRAND.gray, textAlign: "center", lineHeight: 1.7, marginBottom: 28, maxWidth: 520 }}>
             Answer 5 quick questions and we'll tell you exactly what's broken in your books and the fastest way to fix it — without hiring a $5K/month bookkeeper.
           </p>
@@ -353,7 +381,6 @@ export default function LedgerLiftDiagnostic() {
             ))}
           </div>
 
-          {/* ── UPDATED BUTTON ── */}
           <button
             onClick={startDiagnostic}
             style={{ background: BRAND.navy, color: "white", border: "none", borderRadius: 12, padding: "18px 48px", fontSize: 17, fontWeight: 600, cursor: "pointer", letterSpacing: "0.02em", fontFamily: "Georgia,serif", boxShadow: `0 8px 32px ${BRAND.navy}40` }}
@@ -362,7 +389,22 @@ export default function LedgerLiftDiagnostic() {
           >
             Show Me What's Wrong →
           </button>
-          <p style={{ marginTop: 20, fontSize: 13, color: BRAND.gray, textAlign: "center" }}>No signup required to start. Takes about 5 minutes.</p>
+
+          {/* Skip-to-store — for founders who already know what they need */}
+          <p style={{ marginTop: 16, fontSize: 13, color: BRAND.gray, textAlign: "center" }}>
+            No signup required to start. Takes about 5 minutes.
+          </p>
+          <p style={{ marginTop: 10, fontSize: 13, color: BRAND.gray, textAlign: "center" }}>
+            Already know you need the workbook?{" "}
+            <a
+              href="https://stan.store/ledgerliftstudio/p/phase-1-core-workbook?utm_source=diagnostic&utm_medium=landing&utm_campaign=skip-to-store"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: BRAND.gold, textDecoration: "underline", fontWeight: 600 }}
+            >
+              Get it for $17 →
+            </a>
+          </p>
         </div>
       )}
 
@@ -472,6 +514,41 @@ export default function LedgerLiftDiagnostic() {
 
           {!emailSubmitted ? (
             <form onSubmit={submitEmail} style={{ width: "100%", display: "flex", flexDirection: "column", gap: 12, boxSizing: "border-box" }}>
+
+              {/* Direct buy button — Level 1 only, above email gate */}
+              {pendingLevel === 1 && (
+                <>
+                  <a
+                    href="https://stan.store/ledgerliftstudio/p/phase-1-core-workbook?utm_source=diagnostic&utm_medium=reveal&utm_campaign=phase1-workbook"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: "block",
+                      background: BRAND.gold,
+                      color: BRAND.navy,
+                      textDecoration: "none",
+                      borderRadius: 12,
+                      padding: 18,
+                      textAlign: "center",
+                      fontSize: 16,
+                      fontWeight: 700,
+                      boxSizing: "border-box",
+                      boxShadow: `0 8px 24px ${BRAND.gold}50`,
+                    }}
+                  >
+                    Get the Phase 1 Workbook — $17 →
+                  </a>
+                  <p style={{ textAlign: "center", fontSize: 12, color: BRAND.gray, margin: "0 0 4px 0" }}>
+                    Instant download. No email required.
+                  </p>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "4px 0" }}>
+                    <div style={{ flex: 1, height: 1, background: `${BRAND.navy}15` }} />
+                    <span style={{ fontSize: 12, color: BRAND.gray, whiteSpace: "nowrap" }}>or get your free personalized report</span>
+                    <div style={{ flex: 1, height: 1, background: `${BRAND.navy}15` }} />
+                  </div>
+                </>
+              )}
+
               <input type="text" placeholder="Your first name" value={name} onChange={e => setName(e.target.value)} required style={{ width: "100%", padding: "16px 20px", borderRadius: 12, border: `2px solid ${BRAND.navy}20`, fontSize: 16, color: BRAND.navy, background: "white", outline: "none", fontFamily: "Georgia,serif", boxSizing: "border-box" }} />
               <input type="email" placeholder="Your email address" value={email} onChange={e => setEmail(e.target.value)} required style={{ width: "100%", padding: "16px 20px", borderRadius: 12, border: `2px solid ${BRAND.navy}20`, fontSize: 16, color: BRAND.navy, background: "white", outline: "none", fontFamily: "Georgia,serif", boxSizing: "border-box" }} />
               <button type="submit" style={{ background: LEVELS[pendingLevel].color, color: "white", border: "none", borderRadius: 12, padding: 18, fontSize: 16, fontWeight: 600, cursor: "pointer", fontFamily: "Georgia,serif", boxShadow: `0 8px 24px ${LEVELS[pendingLevel].color}40` }}>
