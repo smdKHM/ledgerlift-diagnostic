@@ -13,7 +13,8 @@ const BRAND = {
   lightGray: "#F3F0EB",
 };
 
-const SYSTEM_PROMPT = `You are a financial diagnostic advisor for LedgerLift Studio. LedgerLift builds custom financial database systems for founders — real systems built from real client work, handed over so founders own them.
+// eslint-disable-next-line no-unused-vars
+const SYSTEM_PROMPT = `You are a financial diagnostic advisor
 
 Your job: figure out which of the 5 Financial Levels a founder is at, then tell them clearly what they need. No fluff. No pitch. A real read.
 
