@@ -13,8 +13,6 @@ const BRAND = {
   lightGray: "#F3F0EB",
 };
 
-// ─── SYSTEM PROMPT v2 — Brand Foundation v1.0 aligned ────────────────────────
-// eslint-disable-next-line no-unused-vars
 const SYSTEM_PROMPT = `You are a financial diagnostic advisor for LedgerLift Studio. LedgerLift builds custom financial database systems for founders — real systems built from real client work, handed over so founders own them.
 
 Your job: figure out which of the 5 Financial Levels a founder is at, then tell them clearly what they need. No fluff. No pitch. A real read.
@@ -102,15 +100,13 @@ When you have enough information:
 - If someone asks what this tool is or who made it: "It's a free financial diagnostic — takes about 5 minutes. Let's get into it." Then continue with the next question.
 - Never position the Reset as the destination. It prepares founders for a system. The system is the destination.`;
 
-// ─── LEVELS ──────────────────────────────────────────────────────────────────
 const CAL_LINK = "https://cal.com/ledgerliftstudio/free-15-minute-books-reality-report";
 const LEVELS = {
   1: {
     label: "Level 1 — Foundation",
     revenue: "$0–$50K",
     tagline: "You're flying blind with your money — and tax season is going to be a nightmare.",
-    description:
-      "At this stage, most founders are mixing personal and business money, have no idea what they're actually keeping after expenses, and will face a painful surprise at tax time. Every month without a system costs you clarity — and clarity is what helps you decide whether to keep going or pivot.",
+    description: "At this stage, most founders are mixing personal and business money, have no idea what they're actually keeping after expenses, and will face a painful surprise at tax time. Every month without a system costs you clarity — and clarity is what helps you decide whether to keep going or pivot.",
     recommendation: "Phase 1 Core Workbook",
     price: "$17",
     cta: "Get the Phase 1 Workbook — $17 →",
@@ -125,8 +121,7 @@ const LEVELS = {
     label: "Level 2 — Cleanup",
     revenue: "$50K–$150K",
     tagline: "Your business is growing, but your books are reactive, behind, and hard to trust.",
-    description:
-      "At this stage, founders routinely underprice their services, miss tax deductions, and make hiring decisions based on bank balance instead of actual profit. The Reset clears the mess in 14 days at a fixed price — then you run on a real system going forward. You can't build on a broken foundation.",
+    description: "At this stage, founders routinely underprice their services, miss tax deductions, and make hiring decisions based on bank balance instead of actual profit. The Reset clears the mess in 14 days at a fixed price — then you run on a real system going forward. You can't build on a broken foundation.",
     recommendation: "Bookkeeping Reset Service",
     price: "$997",
     cta: "Book a Free 15-Min Call →",
@@ -141,8 +136,7 @@ const LEVELS = {
     label: "Level 3 — Systems",
     revenue: "$150K–$300K",
     tagline: "You have revenue, but your financial systems haven't kept up with your growth.",
-    description:
-      "Without a real system, you're spending hours each month recreating context you should already have. Your CPA is working from incomplete data. And the decisions you're making about hiring, pricing, and reinvestment are based on guesses, not numbers. LedgerDesk is a real financial database system built for how your business actually operates — handed over so you own it.",
+    description: "Without a real system, you're spending hours each month recreating context you should already have. Your CPA is working from incomplete data. And the decisions you're making about hiring, pricing, and reinvestment are based on guesses, not numbers. LedgerDesk is a real financial database system built for how your business actually operates — handed over so you own it.",
     recommendation: "LedgerDesk Solo",
     price: "$197",
     cta: "Get LedgerDesk Solo →",
@@ -157,8 +151,7 @@ const LEVELS = {
     label: "Level 4 — Strategy",
     revenue: "$300K–$500K",
     tagline: "You have a real business — but your financial infrastructure is still built for a smaller one.",
-    description:
-      "At your revenue level, gaps in your financial reporting cost real money — in overpaid taxes, underpriced offers, or missed opportunities to reinvest strategically. You have the data but nobody's turning it into decisions. You need a financial partner who reads your numbers and thinks ahead with you — not just someone who files transactions.",
+    description: "At your revenue level, gaps in your financial reporting cost real money — in overpaid taxes, underpriced offers, or missed opportunities to reinvest strategically. You have the data but nobody's turning it into decisions. You need a financial partner who reads your numbers and thinks ahead with you — not just someone who files transactions.",
     recommendation: "Custom Engagement",
     price: "Custom",
     cta: "Book a Free 15-Min Call →",
@@ -173,8 +166,7 @@ const LEVELS = {
     label: "Level 5 — Optimized",
     revenue: "$500K+",
     tagline: "You've built something real. Your financial operations need to match the size of your ambition.",
-    description:
-      "At this stage, financial blind spots compound fast. A miscategorized expense, an unreviewed P&L, or a tax position you didn't plan for can cost you more than a full year of bookkeeping. Multiple revenue streams, a team, complex financials — you've outgrown standard tools. Let's build the right infrastructure for where you're going.",
+    description: "At this stage, financial blind spots compound fast. A miscategorized expense, an unreviewed P&L, or a tax position you didn't plan for can cost you more than a full year of bookkeeping. Multiple revenue streams, a team, complex financials — you've outgrown standard tools. Let's build the right infrastructure for where you're going.",
     recommendation: "Custom Engagement",
     price: "Custom",
     cta: "Book a Strategy Call →",
@@ -187,7 +179,6 @@ const LEVELS = {
   },
 };
 
-// ─── API CALL ─────────────────────────────────────────────────────────────────
 async function callClaude(messages) {
   const response = await fetch("/.netlify/functions/claude-proxy", {
     method: "POST",
@@ -202,7 +193,6 @@ async function callClaude(messages) {
   return data.content || "";
 }
 
-// ─── CONVERTKIT ───────────────────────────────────────────────────────────────
 async function subscribeToConvertKit({ email, firstName, level }) {
   const levelData = LEVELS[level];
   if (!levelData) return;
@@ -220,10 +210,10 @@ async function subscribeToConvertKit({ email, firstName, level }) {
   }
 }
 
-// ─── SESSION TRACKING ─────────────────────────────────────────────────────────
 function generateSessionId() {
   return `diag_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
 }
+
 async function trackEvent(sessionId, payload) {
   try {
     await fetch("/.netlify/functions/sheets-proxy", {
@@ -236,7 +226,6 @@ async function trackEvent(sessionId, payload) {
   }
 }
 
-// ─── MAIN COMPONENT ──────────────────────────────────────────────────────────
 export default function LedgerLiftDiagnostic() {
   const [phase, setPhase] = useState("intro");
   const [messages, setMessages] = useState([]);
@@ -277,7 +266,6 @@ export default function LedgerLiftDiagnostic() {
         if (attempt < 1) await new Promise(r => setTimeout(r, 1500));
       }
     }
-    // Fallback if API fails
     setMessages([{
       role: "assistant",
       content: "First question — roughly what's your annual revenue right now? Ballpark is fine.",
@@ -367,19 +355,13 @@ export default function LedgerLiftDiagnostic() {
             Answer 5 quick questions and we'll tell you exactly what's broken in your books and the fastest way to fix it — without hiring a $5K/month bookkeeper.
           </p>
 
-          <p style={{ fontSize: 14, color: BRAND.gray, textAlign: "center", marginBottom: 40, fontStyle: "italic", maxWidth: 420 }}>
+          <p style={{ fontSize: 14, color: BRAND.gray, textAlign: "center", marginBottom: 24, fontStyle: "italic", maxWidth: 420 }}>
             Built by Renee Morrison — bookkeeper who's reviewed 100+ sets of bootstrap books.
           </p>
 
-          <div style={{ display: "flex", gap: 8, marginBottom: 48, flexWrap: "wrap", justifyContent: "center" }}>
-            {Object.entries(LEVELS).map(([num, l]) => (
-              <div key={num} style={{ background: "white", border: `2px solid ${l.color}20`, borderRadius: 12, padding: "12px 16px", textAlign: "center", minWidth: 90 }}>
-                <div style={{ fontSize: 20, marginBottom: 4 }}>{l.icon}</div>
-                <div style={{ fontSize: 11, fontWeight: 700, color: l.color, letterSpacing: "0.05em" }}>Level {num}</div>
-                <div style={{ fontSize: 10, color: BRAND.gray }}>{l.revenue}</div>
-              </div>
-            ))}
-          </div>
+          <p style={{ fontSize: 15, color: BRAND.gray, textAlign: "center", marginBottom: 48, maxWidth: 460 }}>
+            Built for founders at $0–$500K — wherever you are, you'll know exactly what to fix first.
+          </p>
 
           <button
             onClick={startDiagnostic}
@@ -387,23 +369,11 @@ export default function LedgerLiftDiagnostic() {
             onMouseEnter={e => { e.target.style.background = BRAND.navyLight; e.target.style.transform = "translateY(-2px)"; }}
             onMouseLeave={e => { e.target.style.background = BRAND.navy; e.target.style.transform = "translateY(0)"; }}
           >
-            Show Me What's Wrong →
+            Get My Financial Level →
           </button>
 
-          {/* Skip-to-store — for founders who already know what they need */}
           <p style={{ marginTop: 16, fontSize: 13, color: BRAND.gray, textAlign: "center" }}>
             No signup required to start. Takes about 5 minutes.
-          </p>
-          <p style={{ marginTop: 10, fontSize: 13, color: BRAND.gray, textAlign: "center" }}>
-            Already know you need the workbook?{" "}
-            <a
-              href="https://stan.store/ledgerliftstudio/p/phase-1-core-workbook?utm_source=diagnostic&utm_medium=landing&utm_campaign=skip-to-store"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: BRAND.gold, textDecoration: "underline", fontWeight: 600 }}
-            >
-              Get it for $17 →
-            </a>
           </p>
         </div>
       )}
@@ -514,27 +484,13 @@ export default function LedgerLiftDiagnostic() {
 
           {!emailSubmitted ? (
             <form onSubmit={submitEmail} style={{ width: "100%", display: "flex", flexDirection: "column", gap: 12, boxSizing: "border-box" }}>
-
-              {/* Direct buy button — Level 1 only, above email gate */}
               {pendingLevel === 1 && (
                 <>
                   <a
                     href="https://stan.store/ledgerliftstudio/p/phase-1-core-workbook?utm_source=diagnostic&utm_medium=reveal&utm_campaign=phase1-workbook"
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{
-                      display: "block",
-                      background: BRAND.gold,
-                      color: BRAND.navy,
-                      textDecoration: "none",
-                      borderRadius: 12,
-                      padding: 18,
-                      textAlign: "center",
-                      fontSize: 16,
-                      fontWeight: 700,
-                      boxSizing: "border-box",
-                      boxShadow: `0 8px 24px ${BRAND.gold}50`,
-                    }}
+                    style={{ display: "block", background: BRAND.gold, color: BRAND.navy, textDecoration: "none", borderRadius: 12, padding: 18, textAlign: "center", fontSize: 16, fontWeight: 700, boxSizing: "border-box", boxShadow: `0 8px 24px ${BRAND.gold}50` }}
                   >
                     Get the Phase 1 Workbook — $17 →
                   </a>
@@ -548,7 +504,6 @@ export default function LedgerLiftDiagnostic() {
                   </div>
                 </>
               )}
-
               <input type="text" placeholder="Your first name" value={name} onChange={e => setName(e.target.value)} required style={{ width: "100%", padding: "16px 20px", borderRadius: 12, border: `2px solid ${BRAND.navy}20`, fontSize: 16, color: BRAND.navy, background: "white", outline: "none", fontFamily: "Georgia,serif", boxSizing: "border-box" }} />
               <input type="email" placeholder="Your email address" value={email} onChange={e => setEmail(e.target.value)} required style={{ width: "100%", padding: "16px 20px", borderRadius: 12, border: `2px solid ${BRAND.navy}20`, fontSize: 16, color: BRAND.navy, background: "white", outline: "none", fontFamily: "Georgia,serif", boxSizing: "border-box" }} />
               <button type="submit" style={{ background: LEVELS[pendingLevel].color, color: "white", border: "none", borderRadius: 12, padding: 18, fontSize: 16, fontWeight: 600, cursor: "pointer", fontFamily: "Georgia,serif", boxShadow: `0 8px 24px ${LEVELS[pendingLevel].color}40` }}>
