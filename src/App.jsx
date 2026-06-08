@@ -27,7 +27,7 @@ Level 1 — Foundation ($0–$50K revenue)
 - Can't tell if they made money last month
 - Expenses mixed with personal spending
 - Hasn't filed taxes properly or relies on a shoebox
-- What they need: A simple DIY system to get organized (Phase 1 Workbook, $17)
+- What they need: A simple DIY system to get organized (Foundation Kit, $27)
 
 Level 2 — Cleanup ($50K–$150K revenue)
 - Has some system but it's months behind
@@ -108,10 +108,10 @@ const LEVELS = {
     revenue: "$0–$50K",
     tagline: "You're flying blind with your money — and tax season is going to be a nightmare.",
     description: "At this stage, most founders are mixing personal and business money, have no idea what they're actually keeping after expenses, and will face a painful surprise at tax time. Every month without a system costs you clarity — and clarity is what helps you decide whether to keep going or pivot.",
-    recommendation: "Phase 1 Core Workbook",
-    price: "$17",
-    cta: "Get the Phase 1 Workbook — $17 →",
-    ctaLink: "https://stan.store/ledgerliftstudio/p/phase-1-core-workbook?utm_source=diagnostic&utm_medium=result&utm_campaign=phase1-workbook",
+    recommendation: "Foundation Kit",
+    price: "$27",
+    cta: "Get the Foundation Kit — $27 →",
+    ctaLink: "https://stan.store/Ledgerliftstudio/p/foundation-kit?utm_source=diagnostic&utm_medium=result&utm_campaign=foundation-kit",
     secondary: "Or book a free call to talk through your situation",
     secondaryLink: CAL_LINK,
     color: BRAND.sage,
@@ -488,12 +488,12 @@ export default function LedgerLiftDiagnostic() {
               {pendingLevel === 1 && (
                 <>
                   <a
-                    href="https://stan.store/ledgerliftstudio/p/phase-1-core-workbook?utm_source=diagnostic&utm_medium=reveal&utm_campaign=phase1-workbook"
+                    href="https://stan.store/Ledgerliftstudio/p/foundation-kit?utm_source=diagnostic&utm_medium=reveal&utm_campaign=foundation-kit"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ display: "block", background: BRAND.gold, color: BRAND.navy, textDecoration: "none", borderRadius: 12, padding: 18, textAlign: "center", fontSize: 16, fontWeight: 700, boxSizing: "border-box", boxShadow: `0 8px 24px ${BRAND.gold}50` }}
                   >
-                    Get the Phase 1 Workbook — $17 →
+                    Get the Foundation Kit — $27 →
                   </a>
                   <p style={{ textAlign: "center", fontSize: 12, color: BRAND.gray, margin: "0 0 4px 0" }}>
                     Instant download. No email required.
