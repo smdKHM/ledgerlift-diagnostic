@@ -21,20 +21,32 @@ const BRAND = {
 
 const CAL_LINK = "https://cal.com/ledgerliftstudio/free-15-minute-books-reality-report";
 
-// PRODUCT VERSION: v2.0 — Bookkeeping Maturity Stage framework
-// LAST REVIEWED: June 18, 2026 (Session 35)
-// CHANGE LOG: Replaced all user-facing "Level"/"Financial Level" language with
-// "Stage"/"Bookkeeping Maturity Stage" to match Brand Foundation v1.0 (Financial
-// Levels framework is locked as phased out). ConvertKit tag values (ckTag) left
-// UNCHANGED on purpose — those tags already exist in ConvertKit with "Level X -"
-// naming and have automations built against them. Renaming tags here without
-// first renaming/rebuilding them in ConvertKit would silently break tagging.
-// This is a deliberate scope decision (Option B) — revisit ckTag values only
-// after ConvertKit tags + automations are renamed/rebuilt to match.
+// PRODUCT VERSION: v2.1 — Bookkeeping Maturity Stage framework
+// LAST REVIEWED: June 23, 2026 (Session 37)
+// CHANGE LOG (v2.1):
+// - Fixed Stage label drift: "Cleanup" → "Catch-Up" (Stage 2), "Systems" →
+//   "Stabilizing" (Stage 3), "Strategy" → "Systemized" (Stage 4), "Optimized" →
+//   "Scaling" (Stage 5). These must match Strategy v2.0 / Brand Foundation
+//   exactly — Stage names are locked brand-wide.
+// - Removed per-stage revenue bracket fields/display ("$0–$50K" etc). The
+//   Bookkeeping Maturity Stage framework is explicitly operational-readiness
+//   based, not revenue-based ("a $40K founder can be Stage 3, a $400K founder
+//   can be Stage 1"). Displaying a fixed revenue range per stage on the result
+//   screen contradicted that positioning for any visitor outside the assumed
+//   bracket. Removed `revenue` key from LEVELS and its two render sites
+//   (reveal phase, result phase).
+// CHANGE LOG (v2.0, retained from Session 35):
+// - Replaced all user-facing "Level"/"Financial Level" language with
+//   "Stage"/"Bookkeeping Maturity Stage" to match Brand Foundation v1.0.
+// - ConvertKit tag values (ckTag) left UNCHANGED on purpose — those tags
+//   already exist in ConvertKit with "Level X -" naming and have automations
+//   built against them. Renaming tags here without first renaming/rebuilding
+//   them in ConvertKit would silently break tagging. This is a deliberate
+//   scope decision (Option B) — revisit ckTag values only after ConvertKit
+//   tags + automations are renamed/rebuilt to match.
 const LEVELS = {
   1: {
     label: "Stage 1 — Foundation",
-    revenue: "$0–$50K",
     tagline: "You're flying blind with your money — and tax season is going to be a nightmare.",
     description: "At this stage, most founders are mixing personal and business money, have no idea what they're actually keeping after expenses, and will face a painful surprise at tax time. Every month without a system costs you clarity — and clarity is what helps you decide whether to keep going or pivot.",
     recommendation: "Foundation Kit",
@@ -48,8 +60,7 @@ const LEVELS = {
     ckTag: "Level 1 - Build Yourself First",
   },
   2: {
-    label: "Stage 2 — Cleanup",
-    revenue: "$50K–$150K",
+    label: "Stage 2 — Catch-Up",
     tagline: "Your business is growing, but your books are reactive, behind, and hard to trust.",
     description: "At this stage, founders routinely underprice their services, miss tax deductions, and make hiring decisions based on bank balance instead of actual profit. The Reset clears the mess in 14 days at a fixed price — then you run on a real system going forward. You can't build on a broken foundation.",
     recommendation: "Bookkeeping Reset Service",
@@ -63,8 +74,7 @@ const LEVELS = {
     ckTag: "Level 2 - Monthly Close Command Center",
   },
   3: {
-    label: "Stage 3 — Systems",
-    revenue: "$150K–$300K",
+    label: "Stage 3 — Stabilizing",
     tagline: "You have revenue, but your financial systems haven't kept up with your growth.",
     description: "Without a real system, you're spending hours each month recreating context you should already have. Your CPA is working from incomplete data. And the decisions you're making about hiring, pricing, and reinvestment are based on guesses, not numbers. LedgerDesk is a real financial database system built for how your business actually operates — handed over so you own it.",
     recommendation: "LedgerDesk Solo",
@@ -78,10 +88,9 @@ const LEVELS = {
     ckTag: "Level 3 - Build Business Systems",
   },
   4: {
-    label: "Stage 4 — Strategy",
-    revenue: "$300K–$500K",
+    label: "Stage 4 — Systemized",
     tagline: "You have a real business — but your financial infrastructure is still built for a smaller one.",
-    description: "At your revenue level, gaps in your financial reporting cost real money — in overpaid taxes, underpriced offers, or missed opportunities to reinvest strategically. You have the data but nobody's turning it into decisions. You need a financial partner who reads your numbers and thinks ahead with you — not just someone who files transactions.",
+    description: "At your stage, gaps in your financial reporting cost real money — in overpaid taxes, underpriced offers, or missed opportunities to reinvest strategically. You have the data but nobody's turning it into decisions. You need a financial partner who reads your numbers and thinks ahead with you — not just someone who files transactions.",
     recommendation: "Custom Engagement",
     price: "Custom",
     cta: "Book a Free 15-Min Call →",
@@ -93,8 +102,7 @@ const LEVELS = {
     ckTag: "Level 4 - Scale & Automate",
   },
   5: {
-    label: "Stage 5 — Optimized",
-    revenue: "$500K+",
+    label: "Stage 5 — Scaling",
     tagline: "You've built something real. Your financial operations need to match the size of your ambition.",
     description: "At this stage, financial blind spots compound fast. A miscategorized expense, an unreviewed P&L, or a tax position you didn't plan for can cost you more than a full year of bookkeeping. Multiple revenue streams, a team, complex financials — you've outgrown standard tools. Let's build the right infrastructure for where you're going.",
     recommendation: "Custom Engagement",
@@ -394,8 +402,7 @@ export default function LedgerLiftDiagnostic() {
             <div style={{ fontSize: 56, marginBottom: 16 }}>{LEVELS[pendingLevel].icon}</div>
             <div style={{ fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", opacity: 0.8, marginBottom: 10 }}>Your Bookkeeping Stage</div>
             <h2 style={{ fontSize: 32, fontWeight: 700, margin: "0 0 8px 0", lineHeight: 1.2 }}>{LEVELS[pendingLevel].label}</h2>
-            <div style={{ fontSize: 15, opacity: 0.85, marginBottom: 20 }}>{LEVELS[pendingLevel].revenue} annual revenue</div>
-            <div style={{ background: "rgba(255,255,255,0.15)", borderRadius: 12, padding: "16px 20px" }}>
+            <div style={{ background: "rgba(255,255,255,0.15)", borderRadius: 12, padding: "16px 20px", marginTop: 16 }}>
               <p style={{ fontSize: 16, lineHeight: 1.6, margin: 0, fontStyle: "italic" }}>{LEVELS[pendingLevel].tagline}</p>
             </div>
           </div>
@@ -457,7 +464,6 @@ export default function LedgerLiftDiagnostic() {
             <div style={{ fontSize: 48, marginBottom: 12 }}>{level.icon}</div>
             <div style={{ fontSize: 12, letterSpacing: "0.15em", textTransform: "uppercase", opacity: 0.8, marginBottom: 8 }}>Your Bookkeeping Stage</div>
             <h2 style={{ fontSize: 28, fontWeight: 700, margin: "0 0 4px 0" }}>{name ? `${name}, you're ${level.label}` : level.label}</h2>
-            <div style={{ fontSize: 15, opacity: 0.85 }}>{level.revenue} annual revenue</div>
           </div>
 
           <div style={{ background: "white", borderRadius: 16, padding: "24px 28px", width: "100%", marginBottom: 20, border: `2px solid ${level.color}30`, boxSizing: "border-box" }}>
