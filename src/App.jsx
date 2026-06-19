@@ -13,98 +13,27 @@ const BRAND = {
   lightGray: "#F3F0EB",
 };
 
-// eslint-disable-next-line no-unused-vars
-const SYSTEM_PROMPT = `You are a financial diagnostic advisor
-
-Your job: figure out which of the 5 Financial Levels a founder is at, then tell them clearly what they need. No fluff. No pitch. A real read.
-
-Your voice: Direct, experienced, warm but not soft. You've been inside real founder books. You've seen what it costs when this gets ignored. You're not here to be their friend — you're here to give them a real answer and point them toward the right system.
-
-━━━ THE 5 FINANCIAL LEVELS ━━━
-
-Level 1 — Foundation ($0–$50K revenue)
-- No bookkeeping system or a chaotic spreadsheet
-- Can't tell if they made money last month
-- Expenses mixed with personal spending
-- Hasn't filed taxes properly or relies on a shoebox
-- What they need: A simple DIY system to get organized (Foundation Kit, $27)
-
-Level 2 — Cleanup ($50K–$150K revenue)
-- Has some system but it's months behind
-- Transactions uncategorized, accounts unreconciled
-- Dreads tax season because the books are a mess
-- Knows something's wrong but doesn't know where to start
-- What they need: A one-time Bookkeeping Reset to clear the mess — then a real system to run on going forward
-
-Level 3 — Systems ($150K–$300K revenue)
-- Books are mostly current but managing them takes too much founder time
-- No real monthly close process
-- Reports exist but aren't being used to make decisions
-- Ready to stop being their own bookkeeper
-- What they need: LedgerDesk — a real financial database system built for how their business actually operates
-
-Level 4 — Strategy ($300K–$500K revenue)
-- Books are clean (may have a bookkeeper already)
-- Revenue is real but cash flow is confusing
-- No one is turning the numbers into decisions
-- Needs a financial thinking partner, not just data entry
-- What they need: A diagnostic call to scope a custom ongoing engagement
-
-Level 5 — Optimized ($500K+ revenue)
-- Multiple revenue streams, possibly a small team
-- Complex financials, needs real financial infrastructure
-- Standard bookkeeping tools have been outgrown
-- What they need: Custom engagement — must talk directly
-
-━━━ YOUR DIAGNOSTIC PROCESS ━━━
-
-Ask exactly these 5 questions, one at a time. Wait for each answer before asking the next. Never ask two questions in one message.
-
-Q1 (Revenue): Start immediately — no preamble, no warm-up opener. Ask exactly:
-"First question — roughly what's your annual revenue right now? Ballpark is fine."
-
-Q2 (Bookkeeping status): Ask exactly this every time — do not improvise:
-"And your bookkeeping situation right now — are you keeping up with it, months behind, or is it basically nonexistent?"
-The three-option framing is intentional. Do not change it.
-
-Q3 (Pain point): Dig into the specific cost of the problem. Choose based on their answer to Q2:
-- If behind or nonexistent: "When's the last time your books were fully caught up?"
-- If keeping up but stressed: "Do you know roughly what your profit margin is right now?"
-- If tax-related: "What happens at tax time — do you hand over organized records or a shoebox?"
-
-Q4 (Time/effort): "How much time are you spending trying to manage your finances each week?"
-
-Q5 (Urgency/goal): "What's the main thing you want to fix or understand about your finances right now?"
-
-You can diagnose after Q3 if the picture is already clear — especially for Level 1 and 2. Do not force all 5 questions if you already know.
-
-━━━ DIAGNOSIS RULES ━━━
-
-When you have enough information:
-
-1. Give a 2–3 sentence direct summary of what you're seeing. Sound like someone who has been inside real books — not a chatbot generating a report.
-2. Name their level clearly: "Based on what you've told me, you're a Level [N]."
-3. One sentence on what that means for them practically.
-4. For Level 2: make clear the Reset is the first step, not the end goal. Use language like: "The Reset clears the mess so a real system can work — that's the path."
-5. End your message with the exact string: DIAGNOSIS_COMPLETE:[N]
-   Replace [N] with the level number (1, 2, 3, 4, or 5). Example: DIAGNOSIS_COMPLETE:2
-   This string is hidden from the user. Do not reference or explain it.
-
-━━━ GUARDRAILS ━━━
-
-- Never mention specific product names or prices during the conversation. The result page handles that.
-- Never say "LedgerLift" or reference the company by name during the diagnostic.
-- Do not use words like "amazing," "game-changing," "solution," or "journey."
-- Do not open with "Hi there!" or any warm-up preamble. Start with Q1 immediately.
-- If someone's books are clearly a mess, normalize it without dwelling: "That's the most common situation I see."
-- Keep responses to 3–5 sentences max per message. This is a conversation, not a report.
-- If someone asks what this tool is or who made it: "It's a free financial diagnostic — takes about 5 minutes. Let's get into it." Then continue with the next question.
-- Never position the Reset as the destination. It prepares founders for a system. The system is the destination.`;
+// NOTE: SYSTEM_PROMPT removed from this file (June 18, 2026 — Session 35).
+// It was unused dead code — the real system prompt lives in
+// netlify/functions/claude-proxy.js and is the single source of truth.
+// Keeping a duplicate copy here caused this file to drift out of sync
+// with the backend prompt. Do not re-add a prompt constant here.
 
 const CAL_LINK = "https://cal.com/ledgerliftstudio/free-15-minute-books-reality-report";
+
+// PRODUCT VERSION: v2.0 — Bookkeeping Maturity Stage framework
+// LAST REVIEWED: June 18, 2026 (Session 35)
+// CHANGE LOG: Replaced all user-facing "Level"/"Financial Level" language with
+// "Stage"/"Bookkeeping Maturity Stage" to match Brand Foundation v1.0 (Financial
+// Levels framework is locked as phased out). ConvertKit tag values (ckTag) left
+// UNCHANGED on purpose — those tags already exist in ConvertKit with "Level X -"
+// naming and have automations built against them. Renaming tags here without
+// first renaming/rebuilding them in ConvertKit would silently break tagging.
+// This is a deliberate scope decision (Option B) — revisit ckTag values only
+// after ConvertKit tags + automations are renamed/rebuilt to match.
 const LEVELS = {
   1: {
-    label: "Level 1 — Foundation",
+    label: "Stage 1 — Foundation",
     revenue: "$0–$50K",
     tagline: "You're flying blind with your money — and tax season is going to be a nightmare.",
     description: "At this stage, most founders are mixing personal and business money, have no idea what they're actually keeping after expenses, and will face a painful surprise at tax time. Every month without a system costs you clarity — and clarity is what helps you decide whether to keep going or pivot.",
@@ -119,7 +48,7 @@ const LEVELS = {
     ckTag: "Level 1 - Build Yourself First",
   },
   2: {
-    label: "Level 2 — Cleanup",
+    label: "Stage 2 — Cleanup",
     revenue: "$50K–$150K",
     tagline: "Your business is growing, but your books are reactive, behind, and hard to trust.",
     description: "At this stage, founders routinely underprice their services, miss tax deductions, and make hiring decisions based on bank balance instead of actual profit. The Reset clears the mess in 14 days at a fixed price — then you run on a real system going forward. You can't build on a broken foundation.",
@@ -134,7 +63,7 @@ const LEVELS = {
     ckTag: "Level 2 - Monthly Close Command Center",
   },
   3: {
-    label: "Level 3 — Systems",
+    label: "Stage 3 — Systems",
     revenue: "$150K–$300K",
     tagline: "You have revenue, but your financial systems haven't kept up with your growth.",
     description: "Without a real system, you're spending hours each month recreating context you should already have. Your CPA is working from incomplete data. And the decisions you're making about hiring, pricing, and reinvestment are based on guesses, not numbers. LedgerDesk is a real financial database system built for how your business actually operates — handed over so you own it.",
@@ -149,7 +78,7 @@ const LEVELS = {
     ckTag: "Level 3 - Build Business Systems",
   },
   4: {
-    label: "Level 4 — Strategy",
+    label: "Stage 4 — Strategy",
     revenue: "$300K–$500K",
     tagline: "You have a real business — but your financial infrastructure is still built for a smaller one.",
     description: "At your revenue level, gaps in your financial reporting cost real money — in overpaid taxes, underpriced offers, or missed opportunities to reinvest strategically. You have the data but nobody's turning it into decisions. You need a financial partner who reads your numbers and thinks ahead with you — not just someone who files transactions.",
@@ -164,7 +93,7 @@ const LEVELS = {
     ckTag: "Level 4 - Scale & Automate",
   },
   5: {
-    label: "Level 5 — Optimized",
+    label: "Stage 5 — Optimized",
     revenue: "$500K+",
     tagline: "You've built something real. Your financial operations need to match the size of your ambition.",
     description: "At this stage, financial blind spots compound fast. A miscategorized expense, an unreviewed P&L, or a tax position you didn't plan for can cost you more than a full year of bookkeeping. Multiple revenue streams, a team, complex financials — you've outgrown standard tools. Let's build the right infrastructure for where you're going.",
@@ -256,7 +185,7 @@ export default function LedgerLiftDiagnostic() {
     for (let attempt = 0; attempt < 2; attempt++) {
       try {
         const text = await callClaude([
-          { role: "user", content: "Hi, I'd like to find out what financial level I'm at." },
+          { role: "user", content: "Hi, I'd like to find out what stage my bookkeeping is at." },
         ]);
         setMessages([{ role: "assistant", content: text, id: Date.now() }]);
         setQuestionCount(1);
@@ -269,7 +198,7 @@ export default function LedgerLiftDiagnostic() {
     }
     setMessages([{
       role: "assistant",
-      content: "First question — roughly what's your annual revenue right now? Ballpark is fine.",
+      content: "First question — your bookkeeping situation right now: are you keeping up with it, months behind, or is it basically nonexistent?",
       id: Date.now(),
     }]);
     setQuestionCount(1);
@@ -370,7 +299,7 @@ export default function LedgerLiftDiagnostic() {
             onMouseEnter={e => { e.target.style.background = BRAND.navyLight; e.target.style.transform = "translateY(-2px)"; }}
             onMouseLeave={e => { e.target.style.background = BRAND.navy; e.target.style.transform = "translateY(0)"; }}
           >
-            Get My Financial Level →
+            Get My Bookkeeping Stage →
           </button>
 
           <p style={{ marginTop: 16, fontSize: 13, color: BRAND.gray, textAlign: "center" }}>
@@ -463,7 +392,7 @@ export default function LedgerLiftDiagnostic() {
         <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "48px 24px", maxWidth: 600, margin: "0 auto", width: "100%" }}>
           <div style={{ background: LEVELS[pendingLevel].color, color: "white", borderRadius: 24, padding: "40px 40px 32px", textAlign: "center", width: "100%", marginBottom: 28, boxShadow: `0 20px 60px ${LEVELS[pendingLevel].color}50`, boxSizing: "border-box" }}>
             <div style={{ fontSize: 56, marginBottom: 16 }}>{LEVELS[pendingLevel].icon}</div>
-            <div style={{ fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", opacity: 0.8, marginBottom: 10 }}>Your Financial Level</div>
+            <div style={{ fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", opacity: 0.8, marginBottom: 10 }}>Your Bookkeeping Stage</div>
             <h2 style={{ fontSize: 32, fontWeight: 700, margin: "0 0 8px 0", lineHeight: 1.2 }}>{LEVELS[pendingLevel].label}</h2>
             <div style={{ fontSize: 15, opacity: 0.85, marginBottom: 20 }}>{LEVELS[pendingLevel].revenue} annual revenue</div>
             <div style={{ background: "rgba(255,255,255,0.15)", borderRadius: 12, padding: "16px 20px" }}>
@@ -474,7 +403,7 @@ export default function LedgerLiftDiagnostic() {
           <div style={{ background: "white", borderRadius: 16, padding: "24px 28px", width: "100%", marginBottom: 24, border: `2px solid ${BRAND.lightGray}`, boxSizing: "border-box" }}>
             <p style={{ fontSize: 14, color: BRAND.gray, textAlign: "center", margin: "0 0 16px 0", fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase" }}>Your free report includes:</p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {["Exactly what's costing you money right now", "The recommended next step for your level", "A clear action plan — no guessing"].map((item, i) => (
+              {["Exactly what's costing you money right now", "The recommended next step for your stage", "A clear action plan — no guessing"].map((item, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <div style={{ width: 20, height: 20, borderRadius: "50%", background: LEVELS[pendingLevel].color, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: "white", fontWeight: 700, flexShrink: 0 }}>✓</div>
                   <span style={{ fontSize: 14, color: BRAND.navy }}>{item}</span>
@@ -526,7 +455,7 @@ export default function LedgerLiftDiagnostic() {
         <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", padding: "48px 24px", maxWidth: 680, margin: "0 auto", width: "100%" }}>
           <div style={{ background: level.color, color: "white", borderRadius: 20, padding: "32px 40px", textAlign: "center", width: "100%", marginBottom: 32, boxShadow: `0 16px 48px ${level.color}40`, boxSizing: "border-box" }}>
             <div style={{ fontSize: 48, marginBottom: 12 }}>{level.icon}</div>
-            <div style={{ fontSize: 12, letterSpacing: "0.15em", textTransform: "uppercase", opacity: 0.8, marginBottom: 8 }}>Your Financial Level</div>
+            <div style={{ fontSize: 12, letterSpacing: "0.15em", textTransform: "uppercase", opacity: 0.8, marginBottom: 8 }}>Your Bookkeeping Stage</div>
             <h2 style={{ fontSize: 28, fontWeight: 700, margin: "0 0 4px 0" }}>{name ? `${name}, you're ${level.label}` : level.label}</h2>
             <div style={{ fontSize: 15, opacity: 0.85 }}>{level.revenue} annual revenue</div>
           </div>
