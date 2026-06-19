@@ -21,9 +21,15 @@ const BRAND = {
 
 const CAL_LINK = "https://cal.com/ledgerliftstudio/free-15-minute-books-reality-report";
 
-// PRODUCT VERSION: v2.1 — Bookkeeping Maturity Stage framework
-// LAST REVIEWED: June 23, 2026 (Session 37)
-// CHANGE LOG (v2.1):
+// PRODUCT VERSION: v2.2 — Bookkeeping Maturity Stage framework
+// LAST REVIEWED: June 23, 2026 (Session 38 — Reset Service forward-framing fix)
+// CHANGE LOG (v2.2):
+// - Fixed Stage 2 description: Reset Service was framed as a destination
+//   ("then you run on a real system going forward") with no mention of
+//   LedgerDesk. Per the Reset Service Rule (Reset is always an on-ramp,
+//   never a destination), rewrote to explicitly forward-frame into
+//   LedgerDesk by name. Reviewed by Holistic Coach — 10/10, approved as-is.
+// CHANGE LOG (v2.1, retained from Session 37):
 // - Fixed Stage label drift: "Cleanup" → "Catch-Up" (Stage 2), "Systems" →
 //   "Stabilizing" (Stage 3), "Strategy" → "Systemized" (Stage 4), "Optimized" →
 //   "Scaling" (Stage 5). These must match Strategy v2.0 / Brand Foundation
@@ -62,7 +68,7 @@ const LEVELS = {
   2: {
     label: "Stage 2 — Catch-Up",
     tagline: "Your business is growing, but your books are reactive, behind, and hard to trust.",
-    description: "At this stage, founders routinely underprice their services, miss tax deductions, and make hiring decisions based on bank balance instead of actual profit. The Reset clears the mess in 14 days at a fixed price — then you run on a real system going forward. You can't build on a broken foundation.",
+    description: "At this stage, founders routinely underprice their services, miss tax deductions, and make hiring decisions based on bank balance instead of actual profit. The Reset clears the mess in 14 days at a fixed price — it's the on-ramp, not the destination. Once your books are caught up, you move into LedgerDesk, the system built to keep them that way. You can't build a system on a broken foundation.",
     recommendation: "Bookkeeping Reset Service",
     price: "$997",
     cta: "Book a Free 15-Min Call →",
