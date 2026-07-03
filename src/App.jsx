@@ -21,38 +21,62 @@ const BRAND = {
 
 const CAL_LINK = "https://cal.com/ledgerliftstudio/free-15-minute-books-reality-report";
 
-// PRODUCT VERSION: v2.2 — Bookkeeping Maturity Stage framework
-// LAST REVIEWED: June 23, 2026 (Session 38 — Reset Service forward-framing fix)
-// CHANGE LOG (v2.2):
+// PRODUCT VERSION: v2.3 — Session 65 audit remediation
+// LAST REVIEWED: July 3, 2026 (Session 65)
+// CHANGE LOG (v2.3):
+// - Removed "Stage N —" numbering from all `label` values. Locked rule
+//   retires "Level N"/numbered-tier language brand-wide; the eyebrow
+//   "YOUR BOOKKEEPING STAGE" already establishes context, so bare stage
+//   names (e.g. "Foundation") read clean everywhere `label` is used.
+// - Stage 3: fixed regression — was recommending LedgerDesk Solo ($197),
+//   skipping Monthly Close Command Center ($29) entirely. This exact bug
+//   was already found and fixed once (Session 35/37/38, mid-June 2026)
+//   and had reverted by Session 65 — likely an old build redeployed.
+//   Restored correct product, price, description, and live Stan Store
+//   link (verified live in incognito, Session 65).
+// - Stage 4: replaced undefined "Custom Engagement" / "Custom" price
+//   (not on the locked product ladder) with LedgerDesk Solo ($197) —
+//   matches the stage's own definition in the diagnostic system prompt
+//   (single revenue stream, no team, tooling/time problem not scale).
+//   Removed "Book a Free 15-Min Call" as the PRIMARY cta — that framing
+//   is retired brand-wide in favor of the diagnostic tool itself doing
+//   the qualifying. Kept a secondary call option for founders who have
+//   questions before buying.
+// - Stage 5: replaced undefined "Custom Engagement" / "Custom" price
+//   with Financial Systems Strategy Session ($247–297) — matches the
+//   stage's own definition (needs a thinking partner / scoping, not a
+//   fixed self-serve product). KNOWN LIMITATION: this product is
+//   currently Gumroad-only (confirmed in project knowledge,
+//   VALUE_ADD_AUDIT_UPDATED.md) and Gumroad access is fully broken as
+//   of Session 64. ctaLink is temporarily set to CAL_LINK as a bridge —
+//   swap to the live Stan Store URL once Track 1 Rec #8 / the Gumroad→
+//   Stan Store migration lands. See 90-Day Roadmap, Days 31–60.
+// CHANGE LOG (v2.2, retained from Session 38):
 // - Fixed Stage 2 description: Reset Service was framed as a destination
-//   ("then you run on a real system going forward") with no mention of
-//   LedgerDesk. Per the Reset Service Rule (Reset is always an on-ramp,
-//   never a destination), rewrote to explicitly forward-frame into
-//   LedgerDesk by name. Reviewed by Holistic Coach — 10/10, approved as-is.
+//   with no mention of LedgerDesk. Per the Reset Service Rule (Reset is
+//   always an on-ramp, never a destination), rewrote to explicitly
+//   forward-frame into LedgerDesk by name. Reviewed by Holistic Coach —
+//   10/10, approved as-is.
 // CHANGE LOG (v2.1, retained from Session 37):
 // - Fixed Stage label drift: "Cleanup" → "Catch-Up" (Stage 2), "Systems" →
-//   "Stabilizing" (Stage 3), "Strategy" → "Systemized" (Stage 4), "Optimized" →
-//   "Scaling" (Stage 5). These must match Strategy v2.0 / Brand Foundation
-//   exactly — Stage names are locked brand-wide.
+//   "Stabilizing" (Stage 3), "Strategy" → "Systemized" (Stage 4),
+//   "Optimized" → "Scaling" (Stage 5). Stage names are locked brand-wide.
 // - Removed per-stage revenue bracket fields/display ("$0–$50K" etc). The
-//   Bookkeeping Maturity Stage framework is explicitly operational-readiness
-//   based, not revenue-based ("a $40K founder can be Stage 3, a $400K founder
-//   can be Stage 1"). Displaying a fixed revenue range per stage on the result
-//   screen contradicted that positioning for any visitor outside the assumed
-//   bracket. Removed `revenue` key from LEVELS and its two render sites
-//   (reveal phase, result phase).
+//   Bookkeeping Maturity Stage framework is explicitly operational-
+//   readiness based, not revenue-based.
 // CHANGE LOG (v2.0, retained from Session 35):
 // - Replaced all user-facing "Level"/"Financial Level" language with
 //   "Stage"/"Bookkeeping Maturity Stage" to match Brand Foundation v1.0.
 // - ConvertKit tag values (ckTag) left UNCHANGED on purpose — those tags
-//   already exist in ConvertKit with "Level X -" naming and have automations
-//   built against them. Renaming tags here without first renaming/rebuilding
-//   them in ConvertKit would silently break tagging. This is a deliberate
-//   scope decision (Option B) — revisit ckTag values only after ConvertKit
-//   tags + automations are renamed/rebuilt to match.
+//   already exist in ConvertKit with "Level X -" naming and have
+//   automations built against them. Renaming tags here without first
+//   renaming/rebuilding them in ConvertKit would silently break tagging.
+//   This is a deliberate scope decision (Option B) — revisit ckTag
+//   values only after ConvertKit tags + automations are renamed/rebuilt
+//   to match. Still true as of Session 65 — not touched.
 const LEVELS = {
   1: {
-    label: "Stage 1 — Foundation",
+    label: "Foundation",
     tagline: "You're flying blind with your money — and tax season is going to be a nightmare.",
     description: "At this stage, most founders are mixing personal and business money, have no idea what they're actually keeping after expenses, and will face a painful surprise at tax time. Every month without a system costs you clarity — and clarity is what helps you decide whether to keep going or pivot.",
     recommendation: "Foundation Kit",
@@ -66,7 +90,7 @@ const LEVELS = {
     ckTag: "Level 1 - Build Yourself First",
   },
   2: {
-    label: "Stage 2 — Catch-Up",
+    label: "Catch-Up",
     tagline: "Your business is growing, but your books are reactive, behind, and hard to trust.",
     description: "At this stage, founders routinely underprice their services, miss tax deductions, and make hiring decisions based on bank balance instead of actual profit. The Reset clears the mess in 14 days at a fixed price — it's the on-ramp, not the destination. Once your books are caught up, you move into LedgerDesk, the system built to keep them that way. You can't build a system on a broken foundation.",
     recommendation: "Bookkeeping Reset Service",
@@ -80,42 +104,42 @@ const LEVELS = {
     ckTag: "Level 2 - Monthly Close Command Center",
   },
   3: {
-    label: "Stage 3 — Stabilizing",
+    label: "Stabilizing",
     tagline: "You have revenue, but your financial systems haven't kept up with your growth.",
-    description: "Without a real system, you're spending hours each month recreating context you should already have. Your CPA is working from incomplete data. And the decisions you're making about hiring, pricing, and reinvestment are based on guesses, not numbers. LedgerDesk is a real financial database system built for how your business actually operates — handed over so you own it.",
-    recommendation: "LedgerDesk Solo",
-    price: "$197",
-    cta: "Get LedgerDesk Solo →",
-    ctaLink: "https://stan.store/Ledgerliftstudio/p/ledgerdesk-solo--bookkeeping-for-founders",
-    secondary: "Or book a free call to confirm this is the right fit",
+    description: "Without a repeatable close process, you're recreating the same reports from scratch each month, and the numbers exist but nobody fully trusts them for decisions. The Monthly Close Command Center turns that into a real, repeatable process — so closing your books stops being a monthly fire drill.",
+    recommendation: "Monthly Close Command Center",
+    price: "$29",
+    cta: "Get the Monthly Close Command Center — $29 →",
+    ctaLink: "https://stan.store/Ledgerliftstudio/p/monthly-close-command-center?utm_source=diagnostic&utm_medium=result&utm_campaign=monthly-close-cc",
+    secondary: "Or book a free call to talk through your situation",
     secondaryLink: CAL_LINK,
     color: BRAND.navyLight,
     icon: "⚙️",
     ckTag: "Level 3 - Build Business Systems",
   },
   4: {
-    label: "Stage 4 — Systemized",
+    label: "Systemized",
     tagline: "You have a real business — but your financial infrastructure is still built for a smaller one.",
-    description: "At your stage, gaps in your financial reporting cost real money — in overpaid taxes, underpriced offers, or missed opportunities to reinvest strategically. You have the data but nobody's turning it into decisions. You need a financial partner who reads your numbers and thinks ahead with you — not just someone who files transactions.",
-    recommendation: "Custom Engagement",
-    price: "Custom",
-    cta: "Book a Free 15-Min Call →",
-    ctaLink: CAL_LINK,
-    secondary: "Let's figure out exactly what you need",
+    description: "At your stage, gaps in your financial reporting cost real money — in overpaid taxes, underpriced offers, or missed opportunities to reinvest strategically. LedgerDesk is a real financial database system built for how your business actually operates — handed over so you own it. You don't need a bigger team to fix this. You need better infrastructure.",
+    recommendation: "LedgerDesk Solo",
+    price: "$197",
+    cta: "Get LedgerDesk Solo →",
+    ctaLink: "https://stan.store/Ledgerliftstudio/p/ledgerdesk-solo--bookkeeping-for-founders",
+    secondary: "Or book a free call to talk through your situation",
     secondaryLink: CAL_LINK,
     color: BRAND.coral,
     icon: "📈",
     ckTag: "Level 4 - Scale & Automate",
   },
   5: {
-    label: "Stage 5 — Scaling",
+    label: "Scaling",
     tagline: "You've built something real. Your financial operations need to match the size of your ambition.",
-    description: "At this stage, financial blind spots compound fast. A miscategorized expense, an unreviewed P&L, or a tax position you didn't plan for can cost you more than a full year of bookkeeping. Multiple revenue streams, a team, complex financials — you've outgrown standard tools. Let's build the right infrastructure for where you're going.",
-    recommendation: "Custom Engagement",
-    price: "Custom",
-    cta: "Book a Strategy Call →",
-    ctaLink: CAL_LINK,
-    secondary: "Let's build the right solution together",
+    description: "At this stage, financial blind spots compound fast. Multiple revenue streams, a team, complex financials — you've outgrown standard tools, and no single off-the-shelf system fits without scoping first. The Financial Systems Strategy Session is where we map exactly what your business needs before you invest in a build.",
+    recommendation: "Financial Systems Strategy Session",
+    price: "$247–297",
+    cta: "Book Your Strategy Session →",
+    ctaLink: CAL_LINK, // TEMPORARY BRIDGE — see change log note above. Swap to live Stan Store URL once Rec #8 / Gumroad migration lands.
+    secondary: "Have questions first? Let's talk it through",
     secondaryLink: CAL_LINK,
     color: BRAND.navy,
     icon: "🏆",
