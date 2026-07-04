@@ -21,7 +21,24 @@ const BRAND = {
 
 const CAL_LINK = "https://cal.com/ledgerliftstudio/free-15-minute-books-reality-report";
 const SCOPING_CALL_LINK = "https://cal.com/ledgerliftstudio/custom-engagement-scoping-call";
+const SOLO_STRATEGY_SESSION_LINK = "https://stan.store/Ledgerliftstudio/p/book-your-strategy-session-1f9cxvun";
 
+// PRODUCT VERSION: v2.5 — Rec #11 execution (Track 1, Session 66+)
+// LAST REVIEWED: July 4, 2026
+// CHANGE LOG (v2.5):
+// - Stage 5: swapped ctaLink/secondaryLink from SCOPING_CALL_LINK
+//   (Cal.com bridge) to SOLO_STRATEGY_SESSION_LINK — the live Stan Store
+//   "Coaching Call" product (Financial Systems Strategy Session, LedgerDesk
+//   Solo track, $297). This is the real self-serve checkout Rec #11 called
+//   for, replacing the temporary Cal.com bridge noted in v2.4. Stage 4
+//   deliberately left untouched — stays a plain LedgerDesk Solo purchase,
+//   no session attached (Stage 4 = tooling/time problem, self-serve fits;
+//   Stage 5 = needs scoping first, session fits).
+// - KNOWN OPEN ITEM: `price` field still reads "$247–297" (a range meant
+//   to cover both Solo/Access tracks). Since ctaLink now points at the
+//   $297 Solo-track product specifically, the displayed price should
+//   likely be tightened to "$297" for accuracy — not changed here since
+//   it wasn't in scope for this edit; flagging for a follow-up pass.
 // PRODUCT VERSION: v2.4 — Session 65 audit remediation (part 2)
 // LAST REVIEWED: July 3, 2026 (Session 65)
 // CHANGE LOG (v2.4):
@@ -150,9 +167,9 @@ const LEVELS = {
     recommendation: "Financial Systems Strategy Session",
     price: "$247–297",
     cta: "Book Your Strategy Session →",
-    ctaLink: SCOPING_CALL_LINK, // TEMPORARY BRIDGE — see v2.4 change log note above. Swap to live Stan Store URL once Rec #8 / Gumroad migration lands.
+    ctaLink: SOLO_STRATEGY_SESSION_LINK, // v2.5 — live Stan Store checkout, replaces SCOPING_CALL_LINK bridge. See v2.5 change log note re: price field.
     secondary: "Have questions first? Let's talk it through",
-    secondaryLink: SCOPING_CALL_LINK,
+    secondaryLink: SOLO_STRATEGY_SESSION_LINK,
     color: BRAND.navy,
     icon: "🏆",
     ckTag: "Level 5 - Optimize & Master",
