@@ -20,9 +20,21 @@ const BRAND = {
 // with the backend prompt. Do not re-add a prompt constant here.
 
 const CAL_LINK = "https://cal.com/ledgerliftstudio/free-15-minute-books-reality-report";
-const SCOPING_CALL_LINK = "https://cal.com/ledgerliftstudio/custom-engagement-scoping-call";
 const SOLO_STRATEGY_SESSION_LINK = "https://stan.store/Ledgerliftstudio/p/book-your-strategy-session-1f9cxvun";
 
+// PRODUCT VERSION: v2.6 — Rec #11 execution, build fix (Track 1, Session 66+)
+// LAST REVIEWED: July 4, 2026
+// CHANGE LOG (v2.6):
+// - Removed the now-unused SCOPING_CALL_LINK constant. It was left over
+//   from v2.4 after v2.5 swapped Stage 5's ctaLink/secondaryLink to
+//   SOLO_STRATEGY_SESSION_LINK — nothing referenced it anymore. Netlify's
+//   build runs with CI=true, which treats ESLint warnings (including
+//   no-unused-vars) as hard build failures, so the v2.5 deploy failed at
+//   the build stage and Netlify kept serving the last successful (v2.4)
+//   build — which is why the live site still showed the old Cal.com
+//   scoping-call link after the v2.5 push. This fix removes the dead
+//   constant so the build succeeds and v2.5's actual intended change
+//   (Stage 5 → Stan Store Strategy Session link) can go live.
 // PRODUCT VERSION: v2.5 — Rec #11 execution (Track 1, Session 66+)
 // LAST REVIEWED: July 4, 2026
 // CHANGE LOG (v2.5):
