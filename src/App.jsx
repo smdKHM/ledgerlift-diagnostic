@@ -20,7 +20,19 @@ const BRAND = {
 // with the backend prompt. Do not re-add a prompt constant here.
 
 const CAL_LINK = "https://cal.com/ledgerliftstudio/free-15-minute-books-reality-report";
+const SCOPING_CALL_LINK = "https://cal.com/ledgerliftstudio/custom-engagement-scoping-call";
 
+// PRODUCT VERSION: v2.4 — Session 65 audit remediation (part 2)
+// LAST REVIEWED: July 3, 2026 (Session 65)
+// CHANGE LOG (v2.4):
+// - Stage 5: swapped ctaLink/secondaryLink from generic CAL_LINK to
+//   SCOPING_CALL_LINK ("Custom Engagement Scoping Call") — a live Cal.com
+//   event already built for exactly this purpose ("talk through where
+//   your books and systems stand, and whether a custom build or ongoing
+//   engagement is the right fit"), a closer match than the generic
+//   15-minute diagnostic call used elsewhere. Still a temporary bridge
+//   until Rec #8 / Gumroad→Stan Store migration gives the Financial
+//   Systems Strategy Session a real self-serve checkout link.
 // PRODUCT VERSION: v2.3 — Session 65 audit remediation
 // LAST REVIEWED: July 3, 2026 (Session 65)
 // CHANGE LOG (v2.3):
@@ -138,9 +150,9 @@ const LEVELS = {
     recommendation: "Financial Systems Strategy Session",
     price: "$247–297",
     cta: "Book Your Strategy Session →",
-    ctaLink: CAL_LINK, // TEMPORARY BRIDGE — see change log note above. Swap to live Stan Store URL once Rec #8 / Gumroad migration lands.
+    ctaLink: SCOPING_CALL_LINK, // TEMPORARY BRIDGE — see v2.4 change log note above. Swap to live Stan Store URL once Rec #8 / Gumroad migration lands.
     secondary: "Have questions first? Let's talk it through",
-    secondaryLink: CAL_LINK,
+    secondaryLink: SCOPING_CALL_LINK,
     color: BRAND.navy,
     icon: "🏆",
     ckTag: "Level 5 - Optimize & Master",
