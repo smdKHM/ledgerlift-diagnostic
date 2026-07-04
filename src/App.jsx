@@ -22,6 +22,16 @@ const BRAND = {
 const CAL_LINK = "https://cal.com/ledgerliftstudio/free-15-minute-books-reality-report";
 const SOLO_STRATEGY_SESSION_LINK = "https://stan.store/Ledgerliftstudio/p/book-your-strategy-session-1f9cxvun";
 
+// PRODUCT VERSION: v2.7 — Rec #11 cleanup (Track 1, Session 66+)
+// LAST REVIEWED: July 4, 2026
+// CHANGE LOG (v2.7):
+// - Stage 5: tightened price field from "$247–297" (a range covering both
+//   Solo/Access tracks) to "$297" — matches the SOLO_STRATEGY_SESSION_LINK
+//   the ctaLink now points to specifically. NOTE: if Stage 5 traffic ever
+//   needs to branch by track (Solo vs Access), the $247 Access-track
+//   Strategy Session is live at a separate Stan Store URL
+//   (book-your-strategy-session-bk3emtji) — not wired into this stage,
+//   since Stage 5 currently routes everyone through the Solo track only.
 // PRODUCT VERSION: v2.6 — Rec #11 execution, build fix (Track 1, Session 66+)
 // LAST REVIEWED: July 4, 2026
 // CHANGE LOG (v2.6):
@@ -177,7 +187,7 @@ const LEVELS = {
     tagline: "You've built something real. Your financial operations need to match the size of your ambition.",
     description: "At this stage, financial blind spots compound fast. Multiple revenue streams, a team, complex financials — you've outgrown standard tools, and no single off-the-shelf system fits without scoping first. The Financial Systems Strategy Session is where we map exactly what your business needs before you invest in a build.",
     recommendation: "Financial Systems Strategy Session",
-    price: "$247–297",
+    price: "$297",
     cta: "Book Your Strategy Session →",
     ctaLink: SOLO_STRATEGY_SESSION_LINK, // v2.5 — live Stan Store checkout, replaces SCOPING_CALL_LINK bridge. See v2.5 change log note re: price field.
     secondary: "Have questions first? Let's talk it through",
