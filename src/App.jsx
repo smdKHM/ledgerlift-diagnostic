@@ -20,8 +20,50 @@ const BRAND = {
 // with the backend prompt. Do not re-add a prompt constant here.
 
 const CAL_LINK = "https://cal.com/ledgerliftstudio/free-15-minute-books-reality-report";
-const SOLO_STRATEGY_SESSION_LINK = "https://stan.store/Ledgerliftstudio/p/book-your-strategy-session-1f9cxvun";
+const SCOPING_CALL_LINK = "https://cal.com/ledgerliftstudio/custom-engagement-scoping-call";
 
+// PRODUCT VERSION: v2.8 — Stage 2 + Stage 5 routing repair (Session 105)
+// LAST REVIEWED: August 15, 2026
+// CHANGE LOG (v2.8):
+// - Stage 5: repointed ctaLink from SOLO_STRATEGY_SESSION_LINK back to
+//   SCOPING_CALL_LINK and replaced the recommendation with LedgerDesk
+//   Custom ($2,500). Rationale: v2.5 moved Stage 5 to a self-serve Stan
+//   Store checkout because Rec #11 wanted self-serve. That reasoning is
+//   now wrong — LedgerDesk Custom is a $2,500 flat engagement (50% up
+//   front / 50% at handover) that cannot be sold self-serve, so a scoping
+//   call is the correct mechanism, not a bridge to one. Stage 5's own
+//   description already described the Custom scoping path verbatim
+//   ("no single off-the-shelf system fits without scoping first"); the
+//   product it described simply didn't exist in July and does now.
+// - DEPENDENCY — this had to ship BEFORE the $297 Stan listing retitle.
+//   SOLO_STRATEGY_SESSION_LINK pointed at
+//   /p/book-your-strategy-session-1f9cxvun, which is the exact listing
+//   being repurposed as the Historical Summary Load. Had the retitle
+//   landed first, Stage 5 would have either sold a Catch-Up summary load
+//   to a Scaling founder or dead-linked. Both failures are silent.
+// - Stage 5: fixed secondaryLink. It pointed at the same URL as ctaLink,
+//   so "Have questions first? Let's talk it through" led to checkout —
+//   Stage 5 was the only stage with no free-call exit. Now CAL_LINK.
+// - Stage 5: removed the name "Financial Systems Strategy Session," which
+//   never matched the live Stan listing name ("LedgerDesk Strategy
+//   Session") — a mismatch that was live in the tool for six weeks.
+// - Stage 2: routed to the free call with no product attached. Was
+//   recommending "Bookkeeping Reset Service" at $997 — fully retired, so
+//   the CTA booked founders onto a call for something undeliverable.
+//   Not a 404; the quieter failure. Description rewritten to the
+//   catch-up-then-load framing. DELIBERATELY NOT routed to the new $297
+//   Historical Summary Load listing: the standard-vs-non-standard ratio
+//   is unknown until the first three calls, and a published price becomes
+//   a ceiling on a job four times the size.
+// - Deleted the now-unused SOLO_STRATEGY_SESSION_LINK constant in the
+//   SAME commit as the Stage 5 swap. This is the exact no-unused-vars
+//   condition that hard-failed the v2.5 build under Netlify's CI=true and
+//   left the live site serving v2.4 for weeks. Do not split these.
+// - Stage 4: added the missing UTM query string to the LedgerDesk Solo
+//   link. Stages 1 and 3 carried UTMs; 4 and 5 did not, which is part of
+//   why Stan Store attribution reads "Other" only.
+// - ckTag values left UNCHANGED again — same Option B decision as v2.0.
+//   ConvertKit tags must be rebuilt before these can be renamed.
 // PRODUCT VERSION: v2.7 — Rec #11 cleanup (Track 1, Session 66+)
 // LAST REVIEWED: July 4, 2026
 // CHANGE LOG (v2.7):
@@ -124,7 +166,7 @@ const SOLO_STRATEGY_SESSION_LINK = "https://stan.store/Ledgerliftstudio/p/book-y
 //   renaming/rebuilding them in ConvertKit would silently break tagging.
 //   This is a deliberate scope decision (Option B) — revisit ckTag
 //   values only after ConvertKit tags + automations are renamed/rebuilt
-//   to match. Still true as of Session 65 — not touched.
+//   to match. Still true as of Session 105 — not touched.
 const LEVELS = {
   1: {
     label: "Foundation",
@@ -143,12 +185,12 @@ const LEVELS = {
   2: {
     label: "Catch-Up",
     tagline: "Your business is growing, but your books are reactive, behind, and hard to trust.",
-    description: "At this stage, founders routinely underprice their services, miss tax deductions, and make hiring decisions based on bank balance instead of actual profit. The Reset clears the mess in 14 days at a fixed price — it's the on-ramp, not the destination. Once your books are caught up, you move into LedgerDesk, the system built to keep them that way. You can't build a system on a broken foundation.",
-    recommendation: "Bookkeeping Reset Service",
-    price: "$997",
-    cta: "Book a Free 15-Min Call →",
+    description: "At this stage, founders routinely underprice their services, miss tax deductions, and make hiring decisions based on bank balance instead of actual profit. Before any system can help you, the months you're behind have to be caught up and loaded in — and how much work that is depends entirely on how far back it goes and what shape your records are in. That's a conversation, not a checkout button. We'll look at what you've actually got, and what it takes to get you current. Then LedgerDesk is the system that keeps you there.",
+    recommendation: "Books Catch-Up Call",
+    price: "Free",
+    cta: "Book a Free Catch-Up Call →",
     ctaLink: CAL_LINK,
-    secondary: "Let's confirm this is the right fit first",
+    secondary: "Fifteen minutes, no pitch — we're just seeing where you stand",
     secondaryLink: CAL_LINK,
     color: BRAND.gold,
     icon: "🔄",
@@ -175,7 +217,7 @@ const LEVELS = {
     recommendation: "LedgerDesk Solo",
     price: "$197",
     cta: "Get LedgerDesk Solo →",
-    ctaLink: "https://stan.store/Ledgerliftstudio/p/ledgerdesk-solo--bookkeeping-for-founders",
+    ctaLink: "https://stan.store/Ledgerliftstudio/p/ledgerdesk-solo--bookkeeping-for-founders?utm_source=diagnostic&utm_medium=result&utm_campaign=ledgerdesk-solo",
     secondary: "Or book a free call to talk through your situation",
     secondaryLink: CAL_LINK,
     color: BRAND.coral,
@@ -185,13 +227,13 @@ const LEVELS = {
   5: {
     label: "Scaling",
     tagline: "You've built something real. Your financial operations need to match the size of your ambition.",
-    description: "At this stage, financial blind spots compound fast. Multiple revenue streams, a team, complex financials — you've outgrown standard tools, and no single off-the-shelf system fits without scoping first. The Financial Systems Strategy Session is where we map exactly what your business needs before you invest in a build.",
-    recommendation: "Financial Systems Strategy Session",
-    price: "$297",
-    cta: "Book Your Strategy Session →",
-    ctaLink: SOLO_STRATEGY_SESSION_LINK, // v2.5 — live Stan Store checkout, replaces SCOPING_CALL_LINK bridge. See v2.5 change log note re: price field.
-    secondary: "Have questions first? Let's talk it through",
-    secondaryLink: SOLO_STRATEGY_SESSION_LINK,
+    description: "At this stage, financial blind spots compound fast. Multiple revenue streams, job costing, inventory, or separate entities — you've outgrown what an off-the-shelf system can hold, and the shape of what you need can't be guessed at from a questionnaire. LedgerDesk Custom is a financial database built to your operation and handed over so you own it. It starts with a scoping call, because the build gets designed around how your business actually runs.",
+    recommendation: "LedgerDesk Custom",
+    price: "$2,500",
+    cta: "Book Your Scoping Call →",
+    ctaLink: SCOPING_CALL_LINK, // v2.8 — Custom is a $2,500 flat engagement; it cannot be sold self-serve, so the call IS the mechanism, not a bridge to one.
+    secondary: "Have questions first? Book a free 15-minute call",
+    secondaryLink: CAL_LINK, // v2.8 — was pointing at the same URL as ctaLink, leaving Stage 5 the only stage with no free-call exit.
     color: BRAND.navy,
     icon: "🏆",
     ckTag: "Level 5 - Optimize & Master",
