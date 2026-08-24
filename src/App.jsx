@@ -405,7 +405,7 @@ export default function LedgerLiftDiagnostic() {
       {phase === "intro" && (
         <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "48px 24px", maxWidth: 680, margin: "0 auto", width: "100%" }}>
           <div style={{ background: BRAND.gold, color: BRAND.navy, fontSize: 11, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", padding: "6px 16px", borderRadius: 100, marginBottom: 32 }}>
-            Free · 5 Minutes · No Pitch
+            Free · 2 Minutes · No Pitch
           </div>
 
           <h1 style={{ fontSize: "clamp(28px,5vw,44px)", color: BRAND.navy, textAlign: "center", lineHeight: 1.2, marginBottom: 20, fontWeight: 700 }}>
@@ -434,7 +434,7 @@ export default function LedgerLiftDiagnostic() {
           </button>
 
           <p style={{ marginTop: 16, fontSize: 13, color: BRAND.gray, textAlign: "center" }}>
-            No signup required to start. Takes about 5 minutes.
+            No signup required to start. Takes about 2 minutes.
           </p>
         </div>
       )}
