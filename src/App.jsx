@@ -21,7 +21,27 @@ const BRAND = {
 
 const CAL_LINK = "https://cal.com/ledgerliftstudio/free-15-minute-books-reality-report";
 const SCOPING_CALL_LINK = "https://cal.com/ledgerliftstudio/custom-engagement-scoping-call";
+// v2.9 — Payhip short links (Stan closes Nov 9, 2026). The redirects drop query
+// strings, so no UTMs here; click counts live in the blog's Redirection log.
+const SOLO_LINK = "https://blog.ledgerliftstudio.com/buy/solo";
+const SHOP_LINK = "https://blog.ledgerliftstudio.com/shop";
 
+// PRODUCT VERSION: v2.9 — Stan → Payhip repoint, retired products removed (Session 147)
+// LAST REVIEWED: October 26, 2026
+// CHANGE LOG (v2.9):
+// - Stage 1 + reveal screen: Foundation Kit ($27) retired S107, Stan listing
+//   drafted Sep 30 (404 since). Now routes to the free 15-minute call; the
+//   Stage 1-only Foundation Kit button on the reveal screen is removed.
+// - Stage 3: Monthly Close Command Center ($29) retired, Stan listing
+//   drafted Sep 30 (404 since). Now routes to the free 15-minute call.
+//   Solo deliberately NOT used here: Solo serves Systemized (S139).
+// - Stage 4: LedgerDesk Solo link moved from Stan to SOLO_LINK (Payhip).
+// - Stage 1 + 3 secondary link: SHOP_LINK, so neither stage has the same
+//   URL on both buttons.
+// - Intro byline: "Renee" → "Renée" (public name rule, Oct 14).
+// - BUILD NOTE: SOLO_LINK and SHOP_LINK are both referenced below, so the
+//   CI=true no-unused-vars rule is satisfied. Keep it that way.
+// - ckTag values still UNCHANGED (Option B).
 // PRODUCT VERSION: v2.8 — Stage 2 + Stage 5 routing repair (Session 105)
 // LAST REVIEWED: August 15, 2026
 // CHANGE LOG (v2.8):
@@ -172,12 +192,12 @@ const LEVELS = {
     label: "Foundation",
     tagline: "You're flying blind with your money — and tax season is going to be a nightmare.",
     description: "At this stage, most founders are mixing personal and business money, have no idea what they're actually keeping after expenses, and will face a painful surprise at tax time. Every month without a system costs you clarity — and clarity is what helps you decide whether to keep going or pivot.",
-    recommendation: "Foundation Kit",
-    price: "$27",
-    cta: "Get the Foundation Kit — $27 →",
-    ctaLink: "https://stan.store/Ledgerliftstudio/p/foundation-kit?utm_source=diagnostic&utm_medium=result&utm_campaign=foundation-kit",
-    secondary: "Or book a free call to talk through your situation",
-    secondaryLink: CAL_LINK,
+    recommendation: "Free 15-Minute Books Review",
+    price: "Free",
+    cta: "Book My Free 15-Minute Books Review →",
+    ctaLink: CAL_LINK,
+    secondary: "Or see what LedgerLift Studio offers",
+    secondaryLink: SHOP_LINK,
     color: BRAND.sage,
     icon: "🌱",
     ckTag: "Level 1 - Build Yourself First",
@@ -199,13 +219,13 @@ const LEVELS = {
   3: {
     label: "Stabilizing",
     tagline: "You have revenue, but your financial systems haven't kept up with your growth.",
-    description: "Without a repeatable close process, you're recreating the same reports from scratch each month, and the numbers exist but nobody fully trusts them for decisions. The Monthly Close Command Center turns that into a real, repeatable process — so closing your books stops being a monthly fire drill.",
-    recommendation: "Monthly Close Command Center",
-    price: "$29",
-    cta: "Get the Monthly Close Command Center — $29 →",
-    ctaLink: "https://stan.store/Ledgerliftstudio/p/monthly-close-command-center?utm_source=diagnostic&utm_medium=result&utm_campaign=monthly-close-cc",
-    secondary: "Or book a free call to talk through your situation",
-    secondaryLink: CAL_LINK,
+    description: "Without a repeatable close process, you're recreating the same reports from scratch each month, and the numbers exist but nobody fully trusts them for decisions. The fix is a close you run the same way every month, and what that takes depends on what you're running now. Fifteen minutes is enough to see what's missing and what the right next step is.",
+    recommendation: "Free 15-Minute Books Review",
+    price: "Free",
+    cta: "Book My Free 15-Minute Books Review →",
+    ctaLink: CAL_LINK,
+    secondary: "Or see what LedgerLift Studio offers",
+    secondaryLink: SHOP_LINK,
     color: BRAND.navyLight,
     icon: "⚙️",
     ckTag: "Level 3 - Build Business Systems",
@@ -217,7 +237,7 @@ const LEVELS = {
     recommendation: "LedgerDesk Solo",
     price: "$197",
     cta: "Get LedgerDesk Solo →",
-    ctaLink: "https://stan.store/Ledgerliftstudio/p/ledgerdesk-solo--bookkeeping-for-founders?utm_source=diagnostic&utm_medium=result&utm_campaign=ledgerdesk-solo",
+    ctaLink: SOLO_LINK,
     secondary: "Or book a free call to talk through your situation",
     secondaryLink: CAL_LINK,
     color: BRAND.coral,
@@ -417,7 +437,7 @@ export default function LedgerLiftDiagnostic() {
           </p>
 
           <p style={{ fontSize: 14, color: BRAND.gray, textAlign: "center", marginBottom: 24, fontStyle: "italic", maxWidth: 420 }}>
-            Built by Renee Morrison — bookkeeper who's reviewed 100+ sets of bootstrap books.
+            Built by Renée Morrison — bookkeeper who's reviewed 100+ sets of bootstrap books.
           </p>
 
           <p style={{ fontSize: 15, color: BRAND.gray, textAlign: "center", marginBottom: 48, maxWidth: 460 }}>
@@ -544,26 +564,6 @@ export default function LedgerLiftDiagnostic() {
 
           {!emailSubmitted ? (
             <form onSubmit={submitEmail} style={{ width: "100%", display: "flex", flexDirection: "column", gap: 12, boxSizing: "border-box" }}>
-              {pendingLevel === 1 && (
-                <>
-                  <a
-                    href="https://stan.store/Ledgerliftstudio/p/foundation-kit?utm_source=diagnostic&utm_medium=reveal&utm_campaign=foundation-kit"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ display: "block", background: BRAND.gold, color: BRAND.navy, textDecoration: "none", borderRadius: 12, padding: 18, textAlign: "center", fontSize: 16, fontWeight: 700, boxSizing: "border-box", boxShadow: `0 8px 24px ${BRAND.gold}50` }}
-                  >
-                    Get the Foundation Kit — $27 →
-                  </a>
-                  <p style={{ textAlign: "center", fontSize: 12, color: BRAND.gray, margin: "0 0 4px 0" }}>
-                    Instant download. No email required.
-                  </p>
-                  <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "4px 0" }}>
-                    <div style={{ flex: 1, height: 1, background: `${BRAND.navy}15` }} />
-                    <span style={{ fontSize: 12, color: BRAND.gray, whiteSpace: "nowrap" }}>or get your free personalized report</span>
-                    <div style={{ flex: 1, height: 1, background: `${BRAND.navy}15` }} />
-                  </div>
-                </>
-              )}
               <input type="text" placeholder="Your first name" value={name} onChange={e => setName(e.target.value)} required style={{ width: "100%", padding: "16px 20px", borderRadius: 12, border: `2px solid ${BRAND.navy}20`, fontSize: 16, color: BRAND.navy, background: "white", outline: "none", fontFamily: "Georgia,serif", boxSizing: "border-box" }} />
               <input type="email" placeholder="Your email address" value={email} onChange={e => setEmail(e.target.value)} required style={{ width: "100%", padding: "16px 20px", borderRadius: 12, border: `2px solid ${BRAND.navy}20`, fontSize: 16, color: BRAND.navy, background: "white", outline: "none", fontFamily: "Georgia,serif", boxSizing: "border-box" }} />
               <button type="submit" style={{ background: LEVELS[pendingLevel].color, color: "white", border: "none", borderRadius: 12, padding: 18, fontSize: 16, fontWeight: 600, cursor: "pointer", fontFamily: "Georgia,serif", boxShadow: `0 8px 24px ${LEVELS[pendingLevel].color}40` }}>
