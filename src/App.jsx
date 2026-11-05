@@ -26,6 +26,15 @@ const SCOPING_CALL_LINK = "https://cal.com/ledgerliftstudio/custom-engagement-sc
 const SOLO_LINK = "https://blog.ledgerliftstudio.com/buy/solo";
 const SHOP_LINK = "https://blog.ledgerliftstudio.com/shop";
 
+// PRODUCT VERSION: v2.10 — Deadline-frame reframe, Catch-Up stage (Session 155)
+// LAST REVIEWED: November 5, 2026
+// CHANGE LOG (v2.10):
+// - Stage 2 (Catch-Up) tagline + description → "before you file" wording
+//   (claude/Deadline_Frame_Edits_2026-11-04.md, edit 6). Closes the S104
+//   drift alarm. label, recommendation, price, cta, ctaLink, secondary,
+//   secondaryLink, ckTag UNCHANGED. Still not routed to HSL (S105).
+// - public/index.html <title> + og:title → "Founder Diagnostic | LedgerLift Studio"
+//   (no bare "LedgerLift").
 // PRODUCT VERSION: v2.9 — Stan → Payhip repoint, retired products removed (Session 147)
 // LAST REVIEWED: October 26, 2026
 // CHANGE LOG (v2.9):
@@ -204,8 +213,8 @@ const LEVELS = {
   },
   2: {
     label: "Catch-Up",
-    tagline: "Your business is growing, but your books are reactive, behind, and hard to trust.",
-    description: "At this stage, founders routinely underprice their services, miss tax deductions, and make hiring decisions based on bank balance instead of actual profit. Before any system can help you, the months you're behind have to be caught up and loaded in — and how much work that is depends entirely on how far back it goes and what shape your records are in. That's a conversation, not a checkout button. We'll look at what you've actually got, and what it takes to get you current. Then LedgerDesk is the system that keeps you there.",
+    tagline: "You can still get this year's books right before you file.",
+    description: "At this stage, the business is real but the records haven't kept up. That's fixable, and the calendar is on your side. The months you're missing can be caught up and loaded in, so you have a year-to-date P&L you can trust before you file. How much work that is depends on how far back it goes and what shape your records are in. That's a conversation, not a checkout button. We'll look at what you've got and what it takes to get you current. Then LedgerDesk is the system that keeps you there.",
     recommendation: "Books Catch-Up Call",
     price: "Free",
     cta: "Book a Free Catch-Up Call →",
